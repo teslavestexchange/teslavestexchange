@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Operations Command Center | Teslavestexchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+    <!-- Top Administrative Command Bar -->
+    <header class="bg-slate-900 border-b border-red-900/40 px-6 py-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center space-x-3">
+            <span class="text-xs bg-red-950 text-red-400 border border-red-800/60 font-mono px-2 py-1 rounded tracking-widest font-bold uppercase">Admin Node</span>
+            <h1 class="text-md font-bold tracking-wider text-slate-200">TESLAVESTEXCHANGE ENGINE</h1>
+        </div>
+        <div class="text-xs text-slate-400 font-mono">
+            System Identity: <span class="text-blue-400">Staff Portal v1.0</span>
+        </div>
+    </header>
+
+    <!-- Admin Operations Grid Layout -->
+    <main class="p-6 max-w-7xl mx-auto space-y-8">
+        
+        <!-- SECTION 1: System Ledger Summary Metrics -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-lg">
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Pending Escrow Deposits</span>
+                <span class="text-2xl font-mono font-bold text-amber-400 mt-1 block">2 Waiting</span>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-lg">
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Liquidation Claims Queue</span>
+                <span class="text-2xl font-mono font-bold text-rose-400 mt-1 block">1 Pending</span>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-lg">
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Active System Wallets</span>
+                <span class="text-2xl font-mono font-bold text-blue-400 mt-1 block">148 Users</span>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Manual Deposit Reconciliation Ledger -->
+        <section class="bg-slate-900 rounded-xl border border-slate-800 shadow-2xl overflow-hidden">
+            <div class="p-5 border-b border-slate-800 bg-slate-900/60 flex justify-between items-center">
+                <div>
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-200">Manual Allocation Processing Hub</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Cross-examine user audit receipts against cold wallets before manual settlement updates</p>
+                </div>
+                <span class="text-xs bg-amber-950/40 text-amber-400 border border-amber-900/60 px-2.5 py-1 rounded-full font-medium">Awaiting Reconciliation</span>
+            </div>
+
+            <!-- Transaction Records Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-950 text-slate-400 uppercase font-semibold border-b border-slate-800 tracking-wider text-[10px]">
+                            <th class="p-4">User Identity Pointer</th>
+                            <th class="p-4">Asset Type</th>
+                            <th class="p-4 text-right">Requested Balance Update</th>
+                            <th class="p-4">Transaction Audit Proof / Hash</th>
+                            <th class="p-4 text-center">Execution Control Trigger</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 font-mono">
+                        
+                        <!-- Simulated Record Row 1 -->
+                        <tr class="hover:bg-slate-900/40 transition-colors">
+                            <td class="p-4 text-slate-300 font-sans">
+                                <div class="font-semibold">user_7194@example.com</div>
+                                <div class="text-[10px] text-slate-500 font-mono">ID: 8c3b9f42</div>
+                            </td>
+                            <td class="p-4 font-bold text-slate-400">USD</td>
+                            <td class="p-4 text-right font-bold text-emerald-400">$1,500.0000</td>
+                            <td class="p-4 text-slate-400 font-sans">
+                                <span class="bg-slate-950 border border-slate-800 px-2 py-1 rounded text-[11px] block select-all font-mono text-slate-300 truncate max-w-xs">
+                                    TX-94829-WIRE-MATCH-ALPHA
+                                </span>
+                            </td>
+                            <td class="p-4 text-center space-x-2 font-sans">
+                                <button onclick="processTransaction('8c3b9f42', 1500, 'Approved')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded transition-colors text-xs">
+                                    Approve & Credit Balance
+                                </button>
+                                <button onclick="processTransaction('8c3b9f42', 1500, 'Rejected')" class="bg-slate-800 hover:bg-red-950 hover:text-red-400 border border-slate-700 hover:border-red-900 px-3 py-1.5 rounded transition-colors text-xs text-slate-400">
+                                    Reject
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Simulated Record Row 2 -->
+                        <tr class="hover:bg-slate-900/40 transition-colors">
+                            <td class="p-4 text-slate-300 font-sans">
+                                <div class="font-semibold">alpha_trader@example.com</div>
+                                <div class="text-[10px] text-slate-500 font-mono">ID: 2e19c4bb</div>
+                            </td>
+                            <td class="p-4 font-bold text-slate-400">USD</td>
+                            <td class="p-4 text-right font-bold text-emerald-400">$450.0000</td>
+                            <td class="p-4 text-slate-400 font-sans">
+                                <span class="bg-slate-950 border border-slate-800 px-2 py-1 rounded text-[11px] block select-all font-mono text-slate-300 truncate max-w-xs">
+                                    TX-83910-ZELLE-TELEMETRY
+                                </span>
+                            </td>
+                            <td class="p-4 text-center space-x-2 font-sans">
+                                <button onclick="processTransaction('2e19c4bb', 450, 'Approved')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded transition-colors text-xs">
+                                    Approve & Credit Balance
+                                </button>
+                                <button onclick="processTransaction('2e19c4bb', 450, 'Rejected')" class="bg-slate-800 hover:bg-red-950 hover:text-red-400 border border-slate-700 hover:border-red-900 px-3 py-1.5 rounded transition-colors text-xs text-slate-400">
+                                    Reject
+                                </button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Administrative Operations Backend Pipeline Connector Logic -->
+    <script>
+        function processTransaction(userId, amount, resolution) {
+            // This function logs audit changes. In step 6, this fires a POST directly to your isolated serverless database mutation route.
+            alert(`Administrative State Override Applied!\nUser Reference Target: ${userId}\nValue Framework: $${amount}.00\nExecution Order Status: ${resolution}`);
+            
+            // Re-render UI mapping after operation (For local visual demonstration)
+            event.target.closest('tr').style.opacity = '0.3';
+            event.target.closest('tr').style.pointerEvents = 'none';
+        }
+    </script>
+</body>
+</html>

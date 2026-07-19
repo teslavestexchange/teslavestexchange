@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Terminal | Teslavestexchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex items-center justify-between">
+        <span class="text-xl font-bold tracking-wider text-blue-400">TESLAVESTEXCHANGE</span>
+        <div class="flex items-center space-x-4">
+            <span id="accountBadge" class="text-xs bg-slate-700 px-3 py-1.5 rounded-full text-slate-300 font-mono">Profile Secure</span>
+            <button onclick="logout()" class="text-xs text-red-400 hover:underline">Disconnect</button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Layout Grid -->
+    <main class="p-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- COLUMN 1: Live Market Simulator Ticker -->
+        <section class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Simulated Telemetry Matrix</h2>
+            <div class="space-y-4">
+                <!-- BTC Pair Row -->
+                <div class="flex justify-between items-center bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <div>
+                        <div class="font-bold text-sm">BTC / USDT</div>
+                        <div class="text-xs text-slate-500">Bitcoin Core Derivative</div>
+                    </div>
+                    <div id="price-BTCUSDT" class="text-lg font-mono font-bold text-blue-400 transition-all">65,000.00</div>
+                </div>
+                <!-- EUR Pair Row -->
+                <div class="flex justify-between items-center bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <div>
+                        <div class="font-bold text-sm">EUR / USD</div>
+                        <div class="text-xs text-slate-500">Euro Foreign Exchange</div>
+                    </div>
+                    <div id="price-EURUSD" class="text-lg font-mono font-bold text-blue-400 transition-all">1.0850</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COLUMN 2: Ledger Balance View -->
+        <section class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl flex flex-col justify-between">
+            <div>
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Liquid Wallet Balance</h2>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 text-center mb-4">
+                    <span class="text-xs text-slate-400 block uppercase tracking-wide">Available Fiat Equities</span>
+                    <span id="walletUSD" class="text-3xl font-mono font-bold text-emerald-400 block mt-1">$0.0000</span>
+                </div>
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between text-sm">
+                    <span class="text-slate-400">Escrowed Margin:</span>
+                    <span id="frozenUSD" class="font-mono text-slate-300">$0.0000</span>
+                </div>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-4 leading-relaxed">
+                Wallet balances update seamlessly once manual transactions undergo physical clearing checks inside the administrative node.
+            </p>
+        </section>
+
+        <!-- COLUMN 3: Transaction Management Panel -->
+        <section class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl space-y-6">
+            
+            <!-- Manual Deposit Execution Frame -->
+            <div>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Fund Allocation Profile</h3>
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2 mb-3 leading-relaxed">
+                    <div class="font-semibold text-blue-400">Admin Clearing Address (Staging Wallet):</div>
+                    <div class="font-mono bg-slate-950 p-2 rounded select-all break-all border border-slate-800">bc1qtestvault3958hfnv29a0wsldkcmvnsl2</div>
+                </div>
+                <form id="depositForm" class="space-y-3">
+                    <input type="number" step="0.0001" placeholder="Amount (USD)" required id="depAmount"
+                        class="w-full bg-slate-900 border border-slate-700 text-xs rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500">
+                    <input type="text" placeholder="Transaction Hash Reference / Source Name" required id="depRef"
+                        class="w-full bg-slate-900 border border-slate-700 text-xs rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-xs text-white font-semibold py-2 rounded-lg transition-colors">
+                        Submit Deposit Audit Receipt
+                    </button>
+                </form>
+            </div>
+
+            <hr class="border-slate-700">
+
+            <!-- Manual Withdrawal Execution Frame -->
+            <div>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Capital Liquidation Request</h3>
+                <form id="withdrawForm" class="space-y-3">
+                    <input type="number" step="0.0001" placeholder="Amount (USD)" required id="witAmount"
+                        class="w-full bg-slate-900 border border-slate-700 text-xs rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500">
+                    <input type="text" placeholder="Destination Wallet Address" required id="witDest"
+                        class="w-full bg-slate-900 border border-slate-700 text-xs rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500">
+                    <button type="submit" class="w-full bg-slate-700 hover:bg-slate-600 text-xs text-white font-semibold py-2 rounded-lg transition-colors border border-slate-600">
+                        File Liquidation Order
+                    </button>
+                </form>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Operational Telemetry Engine Script -->
+    <script>
+        // 1. Core State Properties
+        let mockMarket = {
+            "BTCUSDT": 65000.00,
+            "EURUSD": 1.0850
+        };
+
+        // 2. Initialize Local Ticker Random Walk Loop
+        function startupPriceEngine() {
+            setInterval(() => {
+                for (let symbol in mockMarket) {
+                    // Inject minor random fluctuations (-0.08% to +0.08%)
+                    let variance = (Math.random() - 0.5) * 0.0016;
+                    mockMarket[symbol] = mockMarket[symbol] * (1 + variance);
+                    
+                    // Render dynamically to browser DOM
+                    let label = document.getElementById(`price-${symbol}`);
+                    if (label) {
+                        let dynamicPrecision = symbol === "EURUSD" ? 4 : 2;
+                        let oldPrice = parseFloat(label.innerText.replace(/,/g, ''));
+                        let currentPrice = mockMarket[symbol];
+                        
+                        label.innerText = currentPrice.toLocaleString(undefined, {
+                            minimumFractionDigits: dynamicPrecision,
+                            maximumFractionDigits: dynamicPrecision
+                        });
+
+                        // Visual color triggers based on ticker tick direction
+                        if (currentPrice > oldPrice) {
+                            label.className = "text-lg font-mono font-bold text-emerald-400 transition-all";
+                        } else {
+                            label.className = "text-lg font-mono font-bold text-rose-400 transition-all";
+                        }
+                    }
+                }
+            }, 1000);
+        }
+
+        // 3. User Forms Operational Triggers
+        document.getElementById('depositForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert(`Audit receipt recorded for $${document.getElementById('depAmount').value}. Status set to Pending awaiting isolated administrative validation.`);
+            document.getElementById('depositForm').reset();
+        });
+
+        document.getElementById('withdrawForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert(`Liquidation request for $${document.getElementById('witAmount').value} initialized. Assets held in escrow state pending validation.`);
+            document.getElementById('withdrawForm').reset();
+        });
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/register.html';
+        }
+
+        // Boot system components
+        window.onload = startupPriceEngine;
+    </script>
+</body>
+</html>

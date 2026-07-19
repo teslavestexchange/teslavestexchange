@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity Verification | Teslavestexchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-700">
+        <div class="text-center mb-6">
+            <h1 class="text-xl font-bold tracking-wider text-blue-400">SECURITY CHECKPOINT</h1>
+            <p class="text-slate-400 text-sm mt-1">Input the 6-digit security token to activate your ledger profile.</p>
+        </div>
+
+        <!-- Dev Sandbox Info Note (Shows the generated token for easy local layout testing) -->
+        <div class="bg-blue-950/40 border border-blue-900 text-blue-400 p-3 rounded-lg text-xs mb-5 text-center">
+            <span class="font-bold">Sandbox Mode Notice:</span> Your generated security token is <span id="devOtpToken" class="font-mono font-bold underline text-sm tracking-wider">------</span>
+        </div>
+
+        <div id="alertBox" class="hidden p-3 rounded-lg text-sm mb-4 text-center"></div>
+
+        <form id="verifyForm" class="space-y-5">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 text-center">One-Time Security Token (OTP)</label>
+                <input type="text" id="otpInput" required maxlength="6" placeholder="000000"
+                    class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-center text-2xl tracking-widest font-mono text-slate-100 focus:outline-none focus:border-blue-500 transition-colors">
+            </div>
+
+            <button type="submit" id="submitBtn"
+                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-lg transition-colors shadow-lg shadow-blue-900/40">
+                Confirm Activation
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Retrieve temporary storage pointers from browser memory
+        const userId = localStorage.getItem('pendingUserId');
+        const expectedOtp = localStorage.getItem('simulatedOtp');
+
+        // Display the token in the sandbox block so you don't need a live email running to test it
+        if (expectedOtp) {
+            document.getElementById('devOtpToken').innerText = expectedOtp;
+        }
+
+        document.getElementById('verifyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const alertBox = document.getElementById('alertBox');
+            const submitBtn = document.getElementById('submitBtn');
+            const typedOtp = document.getElementById('otpInput').value;
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Validating Integrity...";
+            alertBox.className = "hidden";
+
+            try {
+                const response = await fetch('/api/auth/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, typedOtp, expectedOtp })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alertBox.className = "p-3 rounded-lg text-sm mb-4 text-center bg-green-950 text-green-400 border border-green-800";
+                    alertBox.innerText = data.message;
+
+                    // Clear temporary registration keys out of memory
+                    localStorage.removeItem('simulatedOtp');
+
+                    // Forward to client user dashboard panel next
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html';
+                    }, 2000);
+                } else {
+                    throw new Error(data.error || 'Token authorization failed.');
+                }
+            } catch (error) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Confirm Activation";
+                alertBox.className = "p-3 rounded-lg text-sm mb-4 text-center bg-red-950 text-red-400 border border-red-800";
+                alertBox.innerText = error.message;
+            }
+        });
+    </script>
+</body>
+</html>

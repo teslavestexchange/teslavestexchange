@@ -1,54 +1,107 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@600;700;800&display=swap');
 
-/* Tailwind Custom Theme Extensions */
-@layer utilities {
-    /* Custom Fonts */
-    .font-display {
-        font-family: 'Syne', sans-serif;
-    }
-    .font-sans {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-
-    /* Custom Colors */
-    .bg-navy-950 { background-color: #030712; }
-    .bg-navy-900 { background-color: #0B132B; }
-    .bg-navy-800 { background-color: #1C2541; }
-    
-    .text-neon-blue { color: #00F0FF; }
-    .text-neon-cyan { color: #05D5FA; }
-    .text-neon-purple { color: #7000FF; }
-
-    /* Custom Glow Effects */
-    .shadow-glow-blue {
-        box-shadow: 0 0 25px -5px rgba(0, 240, 255, 0.4);
-    }
-    .shadow-glow-purple {
-        box-shadow: 0 0 25px -5px rgba(112, 0, 255, 0.4);
-    }
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
 }
 
-/* Ambient Blue Watermarks & Background Orbs */
-.watermark-bg {
+body {
+    background-color: #0b0f17;
+    color: #e2e8f0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.font-display {
+    font-family: 'Syne', sans-serif;
+}
+
+/* Background Grid & Watermark Effects */
+.bg-grid-watermark {
+    background-size: 3rem 3rem;
     background-image: 
-        radial-gradient(circle at 15% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 85% 60%, rgba(112, 0, 255, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 50% 90%, rgba(5, 213, 250, 0.05) 0%, transparent 50%);
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
-/* Interactive Glowing Card Borders */
-.glowing-border {
-    border: 1px solid rgba(0, 240, 255, 0.2);
+.ambient-green-glow {
+    background: radial-gradient(circle at 50% 20%, rgba(0, 230, 118, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(0, 255, 135, 0.05) 0%, transparent 50%);
+}
+
+/* Glowing Green Elements */
+.text-neon-green {
+    color: #00E676;
+    text-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
+}
+
+.bg-neon-gradient {
+    background: linear-gradient(135deg, #00E676 0%, #00B0FF 100%);
+}
+
+.btn-neon-green {
+    background: linear-gradient(135deg, #00E676 0%, #10B981 100%);
+    color: #0b0f17;
+    font-weight: 800;
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
     transition: all 0.3s ease;
 }
 
-.glowing-border:hover {
-    border-color: rgba(0, 240, 255, 0.6);
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+.btn-neon-green:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 230, 118, 0.6);
 }
 
-/* Non-selectable Background Text */
-.watermark-text {
-    user-select: none;
-    pointer-events: none;
+/* Card Containers */
+.card-grey {
+    background-color: #121824;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.25rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-grey:hover {
+    border-color: rgba(0, 230, 118, 0.4);
+    box-shadow: 0 0 25px rgba(0, 230, 118, 0.15);
+}
+
+.plan-card-featured {
+    background: linear-gradient(180deg, #00E676 0%, #059669 100%);
+    color: #0b0f17;
+    box-shadow: 0 0 35px rgba(0, 230, 118, 0.3);
+}
+
+/* Live Floating Notification Popup */
+.live-popup {
+    animation: slideInRight 0.5s ease-out forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #0b0f17;
+}
+::-webkit-scrollbar-thumb {
+    background: #1a2332;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #00E676;
 }

@@ -8,16 +8,35 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            950: '#0b0f17',
+                            900: '#121824',
+                            800: '#1a2332',
+                        },
+                        neon: {
+                            green: '#00E676'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <!-- External Custom Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- TradingView Lightweight Charts & Widgets -->
+    <!-- TradingView Lightweight Charts -->
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 </head>
-<body class="bg-grid-watermark ambient-green-glow text-slate-100 min-h-screen flex flex-col justify-between">
+<body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col justify-between">
 
     <!-- Sticky Live Ticker Bar (Top Header) -->
-    <div class="bg-slate-950/90 border-b border-slate-800 text-xs py-2 px-4 sticky top-0 z-50 backdrop-blur-md">
+    <div class="bg-slate-950/90 border-b border-slate-800/80 text-xs py-2 px-4 sticky top-0 z-50 backdrop-blur-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-6 overflow-x-auto font-mono whitespace-nowrap text-slate-300">
                 <span class="text-neon-green font-bold tracking-widest uppercase">CRYPTO INVESTMENTS</span>
@@ -49,17 +68,20 @@
     </div>
 
     <!-- Main Header / Navigation -->
-    <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md sticky top-9 z-40">
+    <header class="border-b border-slate-800/80 bg-navy-900/80 backdrop-blur-md sticky top-9 z-40">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="/" class="flex items-center space-x-3">
+            
+            <!-- Brand Logo -->
+            <a href="/" class="flex items-center space-x-3 shrink-0 mr-8">
                 <div class="w-10 h-10 rounded-xl bg-neon-gradient flex items-center justify-center shadow-lg shadow-emerald-500/20">
                     <span class="font-display font-extrabold text-slate-950 text-xl">T</span>
                 </div>
-                <span class="font-display text-xl font-extrabold tracking-wider text-white">
+                <span class="font-display text-lg sm:text-xl font-extrabold tracking-wider text-white">
                     TESLAVEST<span class="text-neon-green">EXCHANGE</span>
                 </span>
             </a>
 
+            <!-- Navigation Links -->
             <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-300">
                 <a href="#proposals" class="hover:text-neon-green transition-colors">Plans</a>
                 <a href="#stats" class="hover:text-neon-green transition-colors">Statistics</a>
@@ -67,6 +89,7 @@
                 <a href="#payments" class="hover:text-neon-green transition-colors">Payments</a>
             </nav>
 
+            <!-- Auth Buttons -->
             <div class="flex items-center space-x-4">
                 <a href="/client/register.html" class="text-sm font-semibold text-slate-300 hover:text-white px-3 py-2 transition-colors">Log In</a>
                 <a href="/client/register.html" class="btn-neon-green px-5 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider">Open Deposit</a>
@@ -79,7 +102,7 @@
 
         <!-- Hero Section -->
         <section class="text-center space-y-8 pt-8">
-            <div class="inline-block bg-slate-900/90 border border-emerald-500/30 px-4 py-1.5 rounded-full text-xs font-mono text-neon-green shadow-lg shadow-emerald-500/10">
+            <div class="inline-block bg-navy-900 border border-emerald-500/30 px-4 py-1.5 rounded-full text-xs font-mono text-neon-green shadow-lg shadow-emerald-500/10">
                 • AUTOMATED AI TRADING BOT ACTIVE
             </div>
             
@@ -205,14 +228,14 @@
                             <p class="text-xs font-bold uppercase">Days Active</p>
                             <p class="text-3xl font-extrabold">712</p>
                         </div>
-                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl font-mono">
+                        <div class="bg-navy-950 border border-slate-800 p-4 rounded-xl font-mono">
                             <p class="text-xs text-slate-400 uppercase">Total Members</p>
                             <p class="text-3xl font-extrabold text-white">89,650</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-3 font-mono text-xs">
+                <div class="bg-navy-950 p-6 rounded-xl border border-slate-800 space-y-3 font-mono text-xs">
                     <div class="border-b border-slate-800 pb-2 text-neon-green font-bold text-sm">UK Incorporation Certificate</div>
                     <p class="text-slate-400"><strong>Reg name:</strong> RealGrowth LTD / Teslavest</p>
                     <p class="text-slate-400"><strong>Official Number:</strong> #13699699</p>
@@ -230,15 +253,15 @@
                     <span class="text-neon-green text-sm">📥 LIVE</span>
                 </h3>
                 <div class="space-y-4 font-mono text-sm">
-                    <div class="flex justify-between items-center bg-slate-950/60 p-3 rounded-lg">
+                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
                         <span class="text-white font-bold">Vagner</span>
                         <span class="text-emerald-400">TRON • 860,000 TRX</span>
                     </div>
-                    <div class="flex justify-between items-center bg-slate-950/60 p-3 rounded-lg">
+                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
                         <span class="text-white font-bold">Austin132002</span>
                         <span class="text-emerald-400">DOGECOIN • 5,000 DOGE</span>
                     </div>
-                    <div class="flex justify-between items-center bg-slate-950/60 p-3 rounded-lg">
+                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
                         <span class="text-white font-bold">Qinny</span>
                         <span class="text-emerald-400">USDT TRC-20 • $1,800 USD</span>
                     </div>
@@ -252,15 +275,15 @@
                     <span class="text-neon-green text-sm">📤 LIVE</span>
                 </h3>
                 <div class="space-y-4 font-mono text-sm">
-                    <div class="flex justify-between items-center bg-slate-950/60 p-3 rounded-lg">
+                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
                         <span class="text-white font-bold">Temirkhan</span>
                         <span class="text-emerald-400">USDT TRC-20 • $139,887.45</span>
                     </div>
-                    <div class="flex justify-between items-center bg-slate-950/60 p-3 rounded-lg">
+                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
                         <span class="text-white font-bold">Aom2525</span>
                         <span class="text-emerald-400">USDT TRC-20 • $5,660.26</span>
                     </div>
-                    <div class="flex justify-between items-center bg-slate-950/60 p-3 rounded-lg">
+                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
                         <span class="text-white font-bold">Tik188</span>
                         <span class="text-emerald-400">USDT TRC-20 • $14,212.17</span>
                     </div>
@@ -283,19 +306,19 @@
         <section id="payments" class="text-center space-y-6">
             <h3 class="font-display text-2xl font-bold uppercase text-white">Supported Payment Systems</h3>
             <div class="flex flex-wrap justify-center items-center gap-8 font-mono text-slate-300 text-sm">
-                <span class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg">₿ Bitcoin</span>
-                <span class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg">💎 Ethereum</span>
-                <span class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg">₮ USDT TRC-20</span>
-                <span class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg">🐕 Dogecoin</span>
-                <span class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg">⚡ Litecoin</span>
-                <span class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg">🔻 TRON</span>
+                <span class="bg-navy-900 border border-slate-800 px-4 py-2 rounded-lg">₿ Bitcoin</span>
+                <span class="bg-navy-900 border border-slate-800 px-4 py-2 rounded-lg">💎 Ethereum</span>
+                <span class="bg-navy-900 border border-slate-800 px-4 py-2 rounded-lg">₮ USDT TRC-20</span>
+                <span class="bg-navy-900 border border-slate-800 px-4 py-2 rounded-lg">🐕 Dogecoin</span>
+                <span class="bg-navy-900 border border-slate-800 px-4 py-2 rounded-lg">⚡ Litecoin</span>
+                <span class="bg-navy-900 border border-slate-800 px-4 py-2 rounded-lg">🔻 TRON</span>
             </div>
         </section>
 
     </main>
 
     <!-- Floating Live Earning Notification -->
-    <div id="earning-popup" class="fixed bottom-6 right-6 bg-slate-900/95 border border-emerald-500/40 p-4 rounded-xl shadow-2xl z-50 flex items-center space-x-3 live-popup">
+    <div id="earning-popup" class="fixed bottom-6 right-6 bg-navy-900 border border-emerald-500/40 p-4 rounded-xl shadow-2xl z-50 flex items-center space-x-3 live-popup">
         <div class="text-3xl text-neon-green">₿</div>
         <div class="text-xs font-mono">
             <p class="text-white font-bold">Earning Notification</p>
@@ -304,7 +327,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800 bg-slate-950 py-10 text-slate-400 text-xs font-mono mt-12">
+    <footer class="border-t border-slate-800 bg-navy-950 py-10 text-slate-400 text-xs font-mono mt-12">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div class="space-y-2">
                 <p class="text-white font-bold uppercase">Menu</p>

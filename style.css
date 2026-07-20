@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+
+/* Tailwind Custom Theme Extensions */
+@layer utilities {
+    /* Custom Fonts */
+    .font-display {
+        font-family: 'Syne', sans-serif;
+    }
+    .font-sans {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Custom Colors */
+    .bg-navy-950 { background-color: #030712; }
+    .bg-navy-900 { background-color: #0B132B; }
+    .bg-navy-800 { background-color: #1C2541; }
+    
+    .text-neon-blue { color: #00F0FF; }
+    .text-neon-cyan { color: #05D5FA; }
+    .text-neon-purple { color: #7000FF; }
+
+    /* Custom Glow Effects */
+    .shadow-glow-blue {
+        box-shadow: 0 0 25px -5px rgba(0, 240, 255, 0.4);
+    }
+    .shadow-glow-purple {
+        box-shadow: 0 0 25px -5px rgba(112, 0, 255, 0.4);
+    }
+}
+
+/* Ambient Blue Watermarks & Background Orbs */
+.watermark-bg {
+    background-image: 
+        radial-gradient(circle at 15% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 85% 60%, rgba(112, 0, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 90%, rgba(5, 213, 250, 0.05) 0%, transparent 50%);
+}
+
+/* Interactive Glowing Card Borders */
+.glowing-border {
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.glowing-border:hover {
+    border-color: rgba(0, 240, 255, 0.6);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+}
+
+/* Non-selectable Background Text */
+.watermark-text {
+    user-select: none;
+    pointer-events: none;
+}

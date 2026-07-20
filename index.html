@@ -8,68 +8,11 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Fonts: Syne (Fancy Display) & Plus Jakarta Sans (Body) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css">
 
-    <!-- Lightweight Charts Script for Candlestick Visuals -->
+    <!-- Lightweight Charts Script -->
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        display: ['Syne', 'sans-serif'],
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        navy: {
-                            950: '#030712',
-                            900: '#0B132B',
-                            800: '#1C2541',
-                            700: '#3A506B',
-                        },
-                        neon: {
-                            blue: '#00F0FF',
-                            purple: '#7000FF',
-                            cyan: '#05D5FA'
-                        }
-                    },
-                    boxShadow: {
-                        'glow-blue': '0 0 25px -5px rgba(0, 240, 255, 0.4)',
-                        'glow-purple': '0 0 25px -5px rgba(112, 0, 255, 0.4)',
-                        'glow-card': '0 0 15px 0px rgba(0, 240, 255, 0.15)',
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        /* Ambient Blue Watermarks & Glow Orbs */
-        .watermark-bg {
-            background-image: 
-                radial-gradient(circle at 15% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 85% 60%, rgba(112, 0, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 50% 90%, rgba(5, 213, 250, 0.05) 0%, transparent 50%);
-        }
-        
-        .glowing-border {
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-        .glowing-border:hover {
-            border-color: rgba(0, 240, 255, 0.6);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
-        }
-
-        .watermark-text {
-            user-select: none;
-            pointer-events: none;
-        }
-    </style>
 </head>
 <body class="bg-navy-950 text-slate-100 font-sans min-h-screen relative overflow-x-hidden watermark-bg flex flex-col justify-between">
 
@@ -77,18 +20,18 @@
     <div class="fixed inset-0 bg-[linear-gradient(to_right,#1C254115_1px,transparent_1px),linear-gradient(to_bottom,#1C254115_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0"></div>
 
     <!-- Giant Glowing Text Watermark -->
-    <div class="fixed -right-20 top-1/3 text-[14rem] font-display font-extrabold text-navy-800/10 watermark-text leading-none z-0">
+    <div class="fixed -right-20 top-1/3 text-[14rem] font-display font-extrabold text-slate-800/10 watermark-text leading-none z-0">
         TESLAVEST
     </div>
 
     <!-- Top Navigation Menu -->
-    <header class="border-b border-navy-800/80 bg-navy-950/80 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-navy-950/50">
+    <header class="border-b border-slate-800/80 bg-navy-950/80 backdrop-blur-md sticky top-0 z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             
             <!-- Brand Logo -->
             <a href="/" class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-neon-purple to-neon-blue flex items-center justify-center shadow-glow-blue">
-                    <span class="font-display font-bold text-navy-950 text-lg">T</span>
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-400 flex items-center justify-center shadow-glow-blue">
+                    <span class="font-display font-bold text-slate-950 text-lg">T</span>
                 </div>
                 <span class="font-display text-xl font-extrabold tracking-wider text-white">
                     TESLAVEST<span class="text-neon-blue drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]">EXCHANGE</span>
@@ -107,7 +50,7 @@
                 <a href="/client/register.html" class="text-sm font-semibold text-slate-300 hover:text-white px-3 py-2 transition-colors">
                     Log In
                 </a>
-                <a href="/client/register.html" class="text-sm font-bold bg-gradient-to-r from-neon-blue to-neon-cyan hover:from-neon-cyan hover:to-neon-blue text-navy-950 px-5 py-2.5 rounded-xl transition-all shadow-glow-blue hover:scale-[1.02]">
+                <a href="/client/register.html" class="text-sm font-bold bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 px-5 py-2.5 rounded-xl transition-all shadow-glow-blue hover:scale-[1.02]">
                     Get Started
                 </a>
             </div>
@@ -122,19 +65,19 @@
             
             <!-- Left Headline -->
             <div class="lg:col-span-5 space-y-6">
-                <div class="inline-flex items-center space-x-2 bg-navy-900/90 border border-neon-blue/30 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neon-blue shadow-glow-blue">
-                    <span class="w-2 h-2 rounded-full bg-neon-blue animate-pulse"></span>
+                <div class="inline-flex items-center space-x-2 bg-navy-900/90 border border-cyan-400/30 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neon-blue shadow-glow-blue">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                     <span>Institutional Liquidity Terminal</span>
                 </div>
                 <h1 class="font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
-                    Algorithmic Wealth & <span class="bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]">Asset Exchange</span>
+                    Algorithmic Wealth & <span class="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]">Asset Exchange</span>
                 </h1>
                 <p class="text-slate-400 text-base leading-relaxed">
                     Trade forex pairs and digital assets with sub-millisecond execution and real-time candlestick charting.
                 </p>
 
                 <div class="flex items-center space-x-4 pt-2">
-                    <a href="/client/register.html" class="font-bold bg-gradient-to-r from-neon-blue to-neon-cyan text-navy-950 px-8 py-3.5 rounded-xl transition-all shadow-glow-blue hover:scale-[1.02]">
+                    <a href="/client/register.html" class="font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 px-8 py-3.5 rounded-xl transition-all shadow-glow-blue hover:scale-[1.02]">
                         Open Trading Account
                     </a>
                 </div>
@@ -142,7 +85,7 @@
 
             <!-- Right Interactive Candlestick Chart Preview -->
             <div id="chart" class="lg:col-span-7 bg-navy-900/80 rounded-2xl p-5 glowing-border shadow-2xl relative overflow-hidden">
-                <div class="flex items-center justify-between pb-4 border-b border-navy-800">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800">
                     <div class="flex items-center space-x-3">
                         <span class="text-xl">💱</span>
                         <div>
@@ -165,7 +108,7 @@
         <section id="markets" class="max-w-7xl mx-auto px-6 py-10">
             <h2 class="font-display text-xl font-bold text-white mb-6 flex items-center space-x-2">
                 <span>Featured Trading Pairs</span>
-                <span class="text-xs bg-neon-blue/10 text-neon-blue border border-neon-blue/30 px-2 py-0.5 rounded-full font-mono">LIVE</span>
+                <span class="text-xs bg-cyan-400/10 text-neon-blue border border-cyan-400/30 px-2 py-0.5 rounded-full font-mono">LIVE</span>
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -182,7 +125,7 @@
                         </div>
                         <span class="font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">+0.24%</span>
                     </div>
-                    <div class="flex justify-between items-end pt-2 border-t border-navy-800/80 font-mono">
+                    <div class="flex justify-between items-end pt-2 border-t border-slate-800/80 font-mono">
                         <div>
                             <p class="text-[10px] text-slate-500 uppercase">Bid Price</p>
                             <p class="text-sm font-semibold text-slate-200">1.08540</p>
@@ -206,7 +149,7 @@
                         </div>
                         <span class="font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">+0.88%</span>
                     </div>
-                    <div class="flex justify-between items-end pt-2 border-t border-navy-800/80 font-mono">
+                    <div class="flex justify-between items-end pt-2 border-t border-slate-800/80 font-mono">
                         <div>
                             <p class="text-[10px] text-slate-500 uppercase">Bid Price</p>
                             <p class="text-sm font-semibold text-slate-200">1.94210</p>
@@ -230,7 +173,7 @@
                         </div>
                         <span class="font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">+3.12%</span>
                     </div>
-                    <div class="flex justify-between items-end pt-2 border-t border-navy-800/80 font-mono">
+                    <div class="flex justify-between items-end pt-2 border-t border-slate-800/80 font-mono">
                         <div>
                             <p class="text-[10px] text-slate-500 uppercase">Bid Price</p>
                             <p class="text-sm font-semibold text-slate-200">$64,250.00</p>
@@ -247,7 +190,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-navy-800/80 bg-navy-950 py-6 text-center relative z-10">
+    <footer class="border-t border-slate-800/80 bg-navy-950 py-6 text-center relative z-10">
         <p class="text-xs text-slate-500 font-mono">
             © 2026 Teslavestexchange Engine. All rights reserved. Encrypted Liquidity Terminal.
         </p>
@@ -284,7 +227,6 @@
                 wickUpColor: '#10B981',
             });
 
-            // Sample Candlestick Data Points
             candleSeries.setData([
                 { time: '2026-07-15', open: 1.0810, high: 1.0835, low: 1.0800, close: 1.0825 },
                 { time: '2026-07-16', open: 1.0825, high: 1.0850, low: 1.0820, close: 1.0840 },

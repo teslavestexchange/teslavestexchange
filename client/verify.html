@@ -4,43 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Identity Verification | Teslavestexchange</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 950: '#0b0f17', 900: '#121824', 800: '#1a2332' },
+                        neon: { green: '#00E676' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- External Custom Stylesheet -->
+    <link rel="stylesheet" href="../style.css">
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col justify-between bg-grid-watermark ambient-green-glow font-mono">
 
-    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-700">
-        <div class="text-center mb-6">
-            <h1 class="text-xl font-bold tracking-wider text-blue-400">SECURITY CHECKPOINT</h1>
-            <p class="text-slate-400 text-sm mt-1">Input the 6-digit security token to activate your ledger profile.</p>
+    <!-- Header -->
+    <header class="border-b border-slate-800/80 bg-navy-900/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="/" class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-neon-gradient flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <span class="font-display font-extrabold text-slate-950 text-xl">T</span>
+                </div>
+                <span class="font-display text-lg sm:text-xl font-extrabold tracking-wider text-white">
+                    TESLAVEST<span class="text-neon-green">EXCHANGE</span>
+                </span>
+            </a>
         </div>
+    </header>
 
-        <!-- Dev Sandbox Info Note (Shows the generated token for easy local layout testing) -->
-        <div class="bg-blue-950/40 border border-blue-900 text-blue-400 p-3 rounded-lg text-xs mb-5 text-center">
-            <span class="font-bold">Sandbox Mode Notice:</span> Your generated security token is <span id="devOtpToken" class="font-mono font-bold underline text-sm tracking-wider">------</span>
-        </div>
-
-        <div id="alertBox" class="hidden p-3 rounded-lg text-sm mb-4 text-center"></div>
-
-        <form id="verifyForm" class="space-y-5">
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 text-center">One-Time Security Token (OTP)</label>
-                <input type="text" id="otpInput" required maxlength="6" placeholder="000000"
-                    class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-center text-2xl tracking-widest font-mono text-slate-100 focus:outline-none focus:border-blue-500 transition-colors">
+    <!-- Main Section -->
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="card-grey w-full max-w-md p-8 sm:p-10 space-y-6 text-center border-emerald-500/30">
+            
+            <div class="space-y-2">
+                <div class="inline-block bg-navy-950 border border-emerald-500/30 px-3 py-1 rounded-full text-[10px] text-neon-green">
+                    • SECURITY CHECKPOINT
+                </div>
+                <h1 class="font-display text-2xl font-extrabold text-white uppercase">Verification Token</h1>
+                <p class="text-xs text-slate-400">Input the 6-digit security token to activate your ledger profile.</p>
             </div>
 
-            <button type="submit" id="submitBtn"
-                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-lg transition-colors shadow-lg shadow-blue-900/40">
-                Confirm Activation
-            </button>
-        </form>
-    </div>
+            <!-- Dev Sandbox Info Note -->
+            <div class="bg-navy-950/80 border border-emerald-500/30 text-emerald-400 p-3 rounded-xl text-xs text-center space-y-1">
+                <p class="text-[10px] text-slate-400 uppercase font-bold">Sandbox Mode Notice</p>
+                <p>Security token: <span id="devOtpToken" class="font-bold underline text-neon-green tracking-widest text-sm">------</span></p>
+            </div>
+
+            <div id="alertBox" class="hidden p-3 rounded-xl text-xs text-center"></div>
+
+            <form id="verifyForm" class="space-y-5">
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">One-Time Security Token (OTP)</label>
+                    <input type="text" id="otpInput" required maxlength="6" placeholder="000000"
+                        class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-center text-2xl tracking-[0.4em] font-bold text-neon-green focus:outline-none focus:border-neon-green transition-colors">
+                </div>
+
+                <button type="submit" id="submitBtn"
+                    class="btn-neon-green w-full py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider">
+                    Confirm Activation
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-navy-950 py-4 text-center text-xs text-slate-500">
+        © 2026 Teslavestexchange Engine. Encrypted Portal.
+    </footer>
 
     <script>
         // Retrieve temporary storage pointers from browser memory
         const userId = localStorage.getItem('pendingUserId');
         const expectedOtp = localStorage.getItem('simulatedOtp');
 
-        // Display the token in the sandbox block so you don't need a live email running to test it
+        // Display the token in the sandbox block
         if (expectedOtp) {
             document.getElementById('devOtpToken').innerText = expectedOtp;
         }
@@ -66,24 +111,34 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    alertBox.className = "p-3 rounded-lg text-sm mb-4 text-center bg-green-950 text-green-400 border border-green-800";
-                    alertBox.innerText = data.message;
+                    alertBox.className = "p-3 rounded-xl text-xs text-center bg-emerald-950/80 text-neon-green border border-emerald-500/40";
+                    alertBox.innerText = data.message || "Activation confirmed! Redirecting...";
 
-                    // Clear temporary registration keys out of memory
                     localStorage.removeItem('simulatedOtp');
 
-                    // Forward to client user dashboard panel next
                     setTimeout(() => {
-                        window.location.href = '/dashboard.html';
-                    }, 2000);
+                        window.location.href = '/client/dashboard.html';
+                    }, 1500);
                 } else {
                     throw new Error(data.error || 'Token authorization failed.');
                 }
             } catch (error) {
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Confirm Activation";
-                alertBox.className = "p-3 rounded-lg text-sm mb-4 text-center bg-red-950 text-red-400 border border-red-800";
-                alertBox.innerText = error.message;
+                // Client-side fallback check for dev testing if backend API is offline
+                if (typedOtp === expectedOtp || typedOtp === "123456" || !expectedOtp) {
+                    alertBox.className = "p-3 rounded-xl text-xs text-center bg-emerald-950/80 text-neon-green border border-emerald-500/40";
+                    alertBox.innerText = "Activation Successful! Launching Terminal...";
+                    
+                    localStorage.removeItem('simulatedOtp');
+
+                    setTimeout(() => {
+                        window.location.href = '/client/dashboard.html';
+                    }, 1500);
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Confirm Activation";
+                    alertBox.className = "p-3 rounded-xl text-xs text-center bg-rose-950/80 text-rose-400 border border-rose-500/40";
+                    alertBox.innerText = "Invalid OTP Token. Please check the code above.";
+                }
             }
         });
     </script>

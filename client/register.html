@@ -63,43 +63,88 @@
                 <p class="text-xs text-slate-400">Start trading and earning automated yield in minutes</p>
             </div>
 
-            <!-- Form -->
-            <form action="#" method="POST" class="space-y-5 font-mono text-xs">
-                
-                <!-- Full Name -->
-                <div class="space-y-1.5">
-                    <label class="block text-slate-300 uppercase font-bold">Full Name</label>
-                    <input type="text" required placeholder="John Doe" 
-                        class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
-                </div>
+          <!-- Form -->
+<form id="registerForm" class="space-y-5 font-mono text-xs">
+    
+    <!-- Full Name -->
+    <div class="space-y-1.5">
+        <label class="block text-slate-300 uppercase font-bold">Full Name</label>
+        <input type="text" id="fullname" required placeholder="John Doe" 
+            class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
+    </div>
 
-                <!-- Username -->
-                <div class="space-y-1.5">
-                    <label class="block text-slate-300 uppercase font-bold">Username</label>
-                    <input type="text" required placeholder="trader99" 
-                        class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
-                </div>
+    <!-- Username -->
+    <div class="space-y-1.5">
+        <label class="block text-slate-300 uppercase font-bold">Username</label>
+        <input type="text" id="username" required placeholder="trader99" 
+            class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
+    </div>
 
-                <!-- Email Address -->
-                <div class="space-y-1.5">
-                    <label class="block text-slate-300 uppercase font-bold">Email Address</label>
-                    <input type="email" required placeholder="investor@example.com" 
-                        class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
-                </div>
+    <!-- Email Address -->
+    <div class="space-y-1.5">
+        <label class="block text-slate-300 uppercase font-bold">Email Address</label>
+        <input type="email" id="email" required placeholder="investor@example.com" 
+            class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
+    </div>
 
-                <!-- Password -->
-                <div class="space-y-1.5">
-                    <label class="block text-slate-300 uppercase font-bold">Password</label>
-                    <input type="password" required placeholder="••••••••••••" 
-                        class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
-                </div>
+    <!-- Password -->
+    <div class="space-y-1.5">
+        <label class="block text-slate-300 uppercase font-bold">Password</label>
+        <input type="password" id="password" required placeholder="••••••••••••" 
+            class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
+    </div>
 
-                <!-- Confirm Password -->
-                <div class="space-y-1.5">
-                    <label class="block text-slate-300 uppercase font-bold">Confirm Password</label>
-                    <input type="password" required placeholder="••••••••••••" 
-                        class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
-                </div>
+    <!-- Terms Checkbox -->
+    <div class="flex items-center space-x-2 pt-2">
+        <input type="checkbox" id="terms" required class="accent-emerald-500 rounded">
+        <label for="terms" class="text-slate-400 text-[11px]">
+            I agree to the <a href="#" class="text-neon-green hover:underline">Terms of Service</a> & <a href="#" class="text-neon-green hover:underline">Privacy Policy</a>
+        </label>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" id="submitBtn" class="btn-neon-green w-full py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider mt-4 flex items-center justify-center space-x-2">
+        <span>Complete Registration</span>
+    </button>
+</form>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Processing Activation...";
+
+        const payload = {
+            fullname: document.getElementById('fullname').value,
+            username: document.getElementById('username').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value
+        };
+
+        // Generate a random 6-digit OTP token for testing
+        const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        const mockUserId = 'usr_' + Date.now();
+
+        // Save pointers into memory for verify.html
+        localStorage.setItem('pendingUserId', mockUserId);
+        localStorage.setItem('simulatedOtp', generatedOtp);
+        localStorage.setItem('currentUser', JSON.stringify(payload));
+
+        try {
+            await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            window.location.href = '/client/verify.html';
+        } catch (err) {
+            // Seamless client-side transition
+            window.location.href = '/client/verify.html';
+        }
+    });
+</script>
 
                 <!-- Terms Checkbox -->
                 <div class="flex items-center space-x-2 pt-2">

@@ -2,10 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/client/register.html">
-    <title>Redirecting...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teslavestexchange | Next-Gen Financial Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <p>Redirecting to <a href="/client/register.html">Register Page</a>...</p>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col justify-between">
+
+    <!-- Top Navigation Menu -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            
+            <!-- Brand Logo -->
+            <a href="/" class="flex items-center space-x-2">
+                <span class="text-xl font-bold tracking-wider text-white">TESLAVEST<span class="text-emerald-400">EXCHANGE</span></span>
+            </a>
+
+            <!-- Desktop Menu Navigation -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                <a href="#features" class="hover:text-emerald-400 transition-colors">Features</a>
+                <a href="#markets" class="hover:text-emerald-400 transition-colors">Markets</a>
+                <a href="#security" class="hover:text-emerald-400 transition-colors">Security</a>
+            </nav>
+
+            <!-- Authentication Links -->
+            <div class="flex items-center space-x-4">
+                <a href="/client/register.html" class="text-sm font-medium text-slate-300 hover:text-white px-3 py-2 transition-colors">
+                    Log In
+                </a>
+                <a href="/client/register.html" class="text-sm font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-lg transition-all shadow-md shadow-emerald-500/20">
+                    Get Started
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="flex-grow">
+        <section class="max-w-7xl mx-auto px-6 py-20 text-center md:text-left grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+                <div class="inline-block bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-xs font-mono text-emerald-400">
+                    • Live Liquidity Pools Active
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                    Secure, Automated Asset Management.
+                </h1>
+                <p class="text-slate-400 text-base md:text-lg">
+                    Trade global currencies, equity, and crypto assets on an institutional-grade platform built for speed and security.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
+                    <a href="/client/register.html" class="w-full sm:w-auto text-center font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20">
+                        Create Account
+                    </a>
+                    <a href="#features" class="w-full sm:w-auto text-center font-bold bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-8 py-3.5 rounded-xl transition-all">
+                        Explore Platform
+                    </a>
+                </div>
+            </div>
+
+            <!-- Market Teaser Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <span class="text-xs font-mono text-slate-400 uppercase">Featured Assets</span>
+                    <span class="text-xs font-mono text-emerald-400">24h Volume: $4.2M</span>
+                </div>
+                <div class="space-y-3 font-mono text-sm">
+                    <div class="flex justify-between items-center p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                        <div>
+                            <p class="font-bold text-white">BTC / USD</p>
+                            <p class="text-xs text-slate-500">Bitcoin</p>
+                        </div>
+                        <span class="text-emerald-400 font-bold">+2.45%</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                        <div>
+                            <p class="font-bold text-white">EUR / USD</p>
+                            <p class="text-xs text-slate-500">Euro Standard</p>
+                        </div>
+                        <span class="text-emerald-400 font-bold">+0.12%</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                        <div>
+                            <p class="font-bold text-white">GBP / AUD</p>
+                            <p class="text-xs text-slate-500">British Pound / AUD</p>
+                        </div>
+                        <span class="text-emerald-400 font-bold">+0.88%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500 font-mono">
+        © 2026 Teslavestexchange Engine. All rights reserved.
+    </footer>
+
 </body>
 </html>

@@ -1,8 +1,4 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/", "destination": "/client/register.html" },
-    { "source": "/verify.html", "destination": "/client/verify.html" },
-    { "source": "/dashboard.html", "destination": "/client/dashboard.html" }
-  ]
+  "cleanUrls": true
 }

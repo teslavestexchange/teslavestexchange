@@ -6,3 +6,9 @@
     { "source": "/(.*)", "destination": "/client/$1" }
   ]
 }
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/client/register.html" }
+  ]
+}

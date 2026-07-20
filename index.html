@@ -3,99 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teslavestexchange | Next-Gen Financial Engine</title>
+    <title>Teslavestexchange | Next-Gen Trading Architecture</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Syne (Fancy Display) & Plus Jakarta Sans (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lightweight Charts Script for Candlestick Visuals -->
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Syne', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            950: '#030712',
+                            900: '#0B132B',
+                            800: '#1C2541',
+                            700: '#3A506B',
+                        },
+                        neon: {
+                            blue: '#00F0FF',
+                            purple: '#7000FF',
+                            cyan: '#05D5FA'
+                        }
+                    },
+                    boxShadow: {
+                        'glow-blue': '0 0 25px -5px rgba(0, 240, 255, 0.4)',
+                        'glow-purple': '0 0 25px -5px rgba(112, 0, 255, 0.4)',
+                        'glow-card': '0 0 15px 0px rgba(0, 240, 255, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Ambient Blue Watermarks & Glow Orbs */
+        .watermark-bg {
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 60%, rgba(112, 0, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(5, 213, 250, 0.05) 0%, transparent 50%);
+        }
+        
+        .glowing-border {
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .glowing-border:hover {
+            border-color: rgba(0, 240, 255, 0.6);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+        }
+
+        .watermark-text {
+            user-select: none;
+            pointer-events: none;
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col justify-between">
+<body class="bg-navy-950 text-slate-100 font-sans min-h-screen relative overflow-x-hidden watermark-bg flex flex-col justify-between">
+
+    <!-- Background Grid Watermark -->
+    <div class="fixed inset-0 bg-[linear-gradient(to_right,#1C254115_1px,transparent_1px),linear-gradient(to_bottom,#1C254115_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0"></div>
+
+    <!-- Giant Glowing Text Watermark -->
+    <div class="fixed -right-20 top-1/3 text-[14rem] font-display font-extrabold text-navy-800/10 watermark-text leading-none z-0">
+        TESLAVEST
+    </div>
 
     <!-- Top Navigation Menu -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <header class="border-b border-navy-800/80 bg-navy-950/80 backdrop-blur-md sticky top-0 z-50 shadow-lg shadow-navy-950/50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             
             <!-- Brand Logo -->
-            <a href="/" class="flex items-center space-x-2">
-                <span class="text-xl font-bold tracking-wider text-white">TESLAVEST<span class="text-emerald-400">EXCHANGE</span></span>
+            <a href="/" class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-neon-purple to-neon-blue flex items-center justify-center shadow-glow-blue">
+                    <span class="font-display font-bold text-navy-950 text-lg">T</span>
+                </div>
+                <span class="font-display text-xl font-extrabold tracking-wider text-white">
+                    TESLAVEST<span class="text-neon-blue drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]">EXCHANGE</span>
+                </span>
             </a>
 
-            <!-- Desktop Menu Navigation -->
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
-                <a href="#features" class="hover:text-emerald-400 transition-colors">Features</a>
-                <a href="#markets" class="hover:text-emerald-400 transition-colors">Markets</a>
-                <a href="#security" class="hover:text-emerald-400 transition-colors">Security</a>
+            <!-- Navigation Menu -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-300">
+                <a href="#markets" class="hover:text-neon-blue transition-colors">Markets</a>
+                <a href="#chart" class="hover:text-neon-blue transition-colors">Terminal</a>
+                <a href="#security" class="hover:text-neon-blue transition-colors">Security</a>
             </nav>
 
-            <!-- Authentication Links -->
+            <!-- Auth Buttons -->
             <div class="flex items-center space-x-4">
-                <a href="/client/register.html" class="text-sm font-medium text-slate-300 hover:text-white px-3 py-2 transition-colors">
+                <a href="/client/register.html" class="text-sm font-semibold text-slate-300 hover:text-white px-3 py-2 transition-colors">
                     Log In
                 </a>
-                <a href="/client/register.html" class="text-sm font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-lg transition-all shadow-md shadow-emerald-500/20">
+                <a href="/client/register.html" class="text-sm font-bold bg-gradient-to-r from-neon-blue to-neon-cyan hover:from-neon-cyan hover:to-neon-blue text-navy-950 px-5 py-2.5 rounded-xl transition-all shadow-glow-blue hover:scale-[1.02]">
                     Get Started
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <main class="flex-grow">
-        <section class="max-w-7xl mx-auto px-6 py-20 text-center md:text-left grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6">
-                <div class="inline-block bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-xs font-mono text-emerald-400">
-                    • Live Liquidity Pools Active
+    <!-- Main Content Area -->
+    <main class="relative z-10 flex-grow">
+        
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 pt-16 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Headline -->
+            <div class="lg:col-span-5 space-y-6">
+                <div class="inline-flex items-center space-x-2 bg-navy-900/90 border border-neon-blue/30 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neon-blue shadow-glow-blue">
+                    <span class="w-2 h-2 rounded-full bg-neon-blue animate-pulse"></span>
+                    <span>Institutional Liquidity Terminal</span>
                 </div>
-                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
-                    Secure, Automated Asset Management.
+                <h1 class="font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                    Algorithmic Wealth & <span class="bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]">Asset Exchange</span>
                 </h1>
-                <p class="text-slate-400 text-base md:text-lg">
-                    Trade global currencies, equity, and crypto assets on an institutional-grade platform built for speed and security.
+                <p class="text-slate-400 text-base leading-relaxed">
+                    Trade forex pairs and digital assets with sub-millisecond execution and real-time candlestick charting.
                 </p>
-                <div class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-                    <a href="/client/register.html" class="w-full sm:w-auto text-center font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20">
-                        Create Account
-                    </a>
-                    <a href="#features" class="w-full sm:w-auto text-center font-bold bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-8 py-3.5 rounded-xl transition-all">
-                        Explore Platform
+
+                <div class="flex items-center space-x-4 pt-2">
+                    <a href="/client/register.html" class="font-bold bg-gradient-to-r from-neon-blue to-neon-cyan text-navy-950 px-8 py-3.5 rounded-xl transition-all shadow-glow-blue hover:scale-[1.02]">
+                        Open Trading Account
                     </a>
                 </div>
             </div>
 
-            <!-- Market Teaser Card -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                    <span class="text-xs font-mono text-slate-400 uppercase">Featured Assets</span>
-                    <span class="text-xs font-mono text-emerald-400">24h Volume: $4.2M</span>
-                </div>
-                <div class="space-y-3 font-mono text-sm">
-                    <div class="flex justify-between items-center p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
+            <!-- Right Interactive Candlestick Chart Preview -->
+            <div id="chart" class="lg:col-span-7 bg-navy-900/80 rounded-2xl p-5 glowing-border shadow-2xl relative overflow-hidden">
+                <div class="flex items-center justify-between pb-4 border-b border-navy-800">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xl">💱</span>
                         <div>
-                            <p class="font-bold text-white">BTC / USD</p>
-                            <p class="text-xs text-slate-500">Bitcoin</p>
+                            <h3 class="font-display font-bold text-white text-base">EUR / USD</h3>
+                            <p class="text-xs text-slate-400 font-mono">Euro / US Dollar • 1H Candlestick Stream</p>
                         </div>
-                        <span class="text-emerald-400 font-bold">+2.45%</span>
                     </div>
-                    <div class="flex justify-between items-center p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
-                        <div>
-                            <p class="font-bold text-white">EUR / USD</p>
-                            <p class="text-xs text-slate-500">Euro Standard</p>
-                        </div>
-                        <span class="text-emerald-400 font-bold">+0.12%</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
-                        <div>
-                            <p class="font-bold text-white">GBP / AUD</p>
-                            <p class="text-xs text-slate-500">British Pound / AUD</p>
-                        </div>
-                        <span class="text-emerald-400 font-bold">+0.88%</span>
+                    <div class="text-right font-mono">
+                        <span class="text-emerald-400 font-bold text-lg">1.08542</span>
+                        <span class="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded ml-2">+0.24%</span>
                     </div>
                 </div>
+
+                <!-- Candlestick Chart Container -->
+                <div id="tv-chart" class="w-full h-[320px] pt-2"></div>
+            </div>
+        </section>
+
+        <!-- Currency Pairs Section -->
+        <section id="markets" class="max-w-7xl mx-auto px-6 py-10">
+            <h2 class="font-display text-xl font-bold text-white mb-6 flex items-center space-x-2">
+                <span>Featured Trading Pairs</span>
+                <span class="text-xs bg-neon-blue/10 text-neon-blue border border-neon-blue/30 px-2 py-0.5 rounded-full font-mono">LIVE</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- EUR / USD Card -->
+                <div class="bg-navy-900/60 rounded-xl p-5 glowing-border space-y-3 relative">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl">🇪🇺🇺🇸</span>
+                            <div>
+                                <h4 class="font-bold text-white">EUR / USD</h4>
+                                <p class="text-xs text-slate-400">Euro Standard</p>
+                            </div>
+                        </div>
+                        <span class="font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">+0.24%</span>
+                    </div>
+                    <div class="flex justify-between items-end pt-2 border-t border-navy-800/80 font-mono">
+                        <div>
+                            <p class="text-[10px] text-slate-500 uppercase">Bid Price</p>
+                            <p class="text-sm font-semibold text-slate-200">1.08540</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] text-slate-500 uppercase">Ask Price</p>
+                            <p class="text-sm font-semibold text-slate-200">1.08544</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GBP / AUD Card -->
+                <div class="bg-navy-900/60 rounded-xl p-5 glowing-border space-y-3 relative">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl">🇬🇧🇦🇺</span>
+                            <div>
+                                <h4 class="font-bold text-white">GBP / AUD</h4>
+                                <p class="text-xs text-slate-400">British Pound / AUD</p>
+                            </div>
+                        </div>
+                        <span class="font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">+0.88%</span>
+                    </div>
+                    <div class="flex justify-between items-end pt-2 border-t border-navy-800/80 font-mono">
+                        <div>
+                            <p class="text-[10px] text-slate-500 uppercase">Bid Price</p>
+                            <p class="text-sm font-semibold text-slate-200">1.94210</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] text-slate-500 uppercase">Ask Price</p>
+                            <p class="text-sm font-semibold text-slate-200">1.94228</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BTC / USD Card -->
+                <div class="bg-navy-900/60 rounded-xl p-5 glowing-border space-y-3 relative">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl">₿</span>
+                            <div>
+                                <h4 class="font-bold text-white">BTC / USD</h4>
+                                <p class="text-xs text-slate-400">Bitcoin Spot</p>
+                            </div>
+                        </div>
+                        <span class="font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">+3.12%</span>
+                    </div>
+                    <div class="flex justify-between items-end pt-2 border-t border-navy-800/80 font-mono">
+                        <div>
+                            <p class="text-[10px] text-slate-500 uppercase">Bid Price</p>
+                            <p class="text-sm font-semibold text-slate-200">$64,250.00</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] text-slate-500 uppercase">Ask Price</p>
+                            <p class="text-sm font-semibold text-slate-200">$64,255.50</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500 font-mono">
-        © 2026 Teslavestexchange Engine. All rights reserved.
+    <footer class="border-t border-navy-800/80 bg-navy-950 py-6 text-center relative z-10">
+        <p class="text-xs text-slate-500 font-mono">
+            © 2026 Teslavestexchange Engine. All rights reserved. Encrypted Liquidity Terminal.
+        </p>
     </footer>
 
+    <!-- Candlestick Chart Render Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartContainer = document.getElementById('tv-chart');
+            
+            const chart = LightweightCharts.createChart(chartContainer, {
+                layout: {
+                    backgroundColor: 'transparent',
+                    textColor: '#94A3B8',
+                },
+                grid: {
+                    vertLines: { color: '#1C254140' },
+                    horzLines: { color: '#1C254140' },
+                },
+                crosshair: {
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                },
+                timeScale: {
+                    borderColor: '#1C2541',
+                },
+            });
+
+            const candleSeries = chart.addCandlestickSeries({
+                upColor: '#10B981',
+                downColor: '#EF4444',
+                borderDownColor: '#EF4444',
+                borderUpColor: '#10B981',
+                wickDownColor: '#EF4444',
+                wickUpColor: '#10B981',
+            });
+
+            // Sample Candlestick Data Points
+            candleSeries.setData([
+                { time: '2026-07-15', open: 1.0810, high: 1.0835, low: 1.0800, close: 1.0825 },
+                { time: '2026-07-16', open: 1.0825, high: 1.0850, low: 1.0820, close: 1.0840 },
+                { time: '2026-07-17', open: 1.0840, high: 1.0845, low: 1.0815, close: 1.0820 },
+                { time: '2026-07-18', open: 1.0820, high: 1.0860, low: 1.0818, close: 1.0855 },
+                { time: '2026-07-19', open: 1.0855, high: 1.0870, low: 1.0840, close: 1.0848 },
+                { time: '2026-07-20', open: 1.0848, high: 1.0862, low: 1.0842, close: 1.0854 },
+            ]);
+
+            window.addEventListener('resize', () => {
+                chart.applyOptions({ width: chartContainer.clientWidth });
+            });
+        });
+    </script>
 </body>
 </html>

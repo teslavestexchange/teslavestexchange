@@ -114,7 +114,7 @@
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
-        submitBtn.innerText = "Processing Activation...";
+        submitBtn.innerText = "Sending Verification Email...";
 
         const payload = {
             fullname: document.getElementById('fullname').value,
@@ -123,25 +123,29 @@
             password: document.getElementById('password').value
         };
 
-        // Generate a random 6-digit OTP token for testing
-        const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-        const mockUserId = 'usr_' + Date.now();
-
-        // Save pointers into memory for verify.html
-        localStorage.setItem('pendingUserId', mockUserId);
-        localStorage.setItem('simulatedOtp', generatedOtp);
-        localStorage.setItem('currentUser', JSON.stringify(payload));
-
         try {
-            await fetch('/api/auth/register', {
+            const response = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            window.location.href = '/client/verify.html';
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Save state and token returned from server for verify.html logic
+                localStorage.setItem('pendingUserId', data.userId);
+                localStorage.setItem('simulatedOtp', data.otpCode);
+                localStorage.setItem('currentUser', JSON.stringify(payload));
+
+                window.location.href = '/client/verify.html';
+            } else {
+                throw new Error(data.error || 'Failed to process registration');
+            }
         } catch (err) {
-            // Seamless client-side transition
-            window.location.href = '/client/verify.html';
+            alert('Registration error: ' + err.message);
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Complete Registration";
         }
     });
 </script>

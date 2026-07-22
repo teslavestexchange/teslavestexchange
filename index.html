@@ -192,24 +192,47 @@
             </div>
         </section>
 
-        <!-- Live Candlestick & Market Indices Chart -->
-        <section class="space-y-6">
-            <div class="flex justify-between items-center">
-                <h3 class="font-display text-xl font-bold uppercase text-white">Market Terminal Stream</h3>
-                <span class="text-xs font-mono text-neon-green bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">• LIVE FEED</span>
+       <!-- Live Candlestick & Market Indices Chart -->
+<section class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h3 class="font-display text-xl font-bold uppercase text-white">Market Terminal Stream</h3>
+        <span class="text-xs font-mono text-neon-green bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">• LIVE FEED</span>
+    </div>
+    
+    <div class="card-grey p-4 md:p-6 space-y-4">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+            <div>
+                <h4 class="font-bold text-white font-mono text-lg">BTC / USD Spot</h4>
+                <p class="text-xs text-slate-400 font-mono">Real-time TradingView Candlestick Stream</p>
             </div>
-            
-            <div class="card-grey p-6 space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-                    <div>
-                        <h4 class="font-bold text-white font-mono text-lg">BTC / USD Spot</h4>
-                        <p class="text-xs text-slate-400 font-mono">Real-time 1H Candlestick Data</p>
-                    </div>
-                    <span class="text-neon-green font-mono font-bold text-lg">$63,972.87 (-1.00%)</span>
-                </div>
-                <div id="tv-chart" class="w-full h-[360px]"></div>
+            <span class="text-neon-green font-mono font-bold text-lg">$63,972.87 (-1.00%)</span>
+        </div>
+
+        <!-- TradingView Embedded Widget Container -->
+        <div class="w-full h-[450px] rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
+            <div class="tradingview-widget-container" style="height:100%;width:100%">
+                <div id="tradingview_chart" style="height:calc(100% - 32px);width:100%"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                <script type="text/javascript">
+                    new TradingView.widget({
+                        "autosize": true,
+                        "symbol": "BINANCE:BTCUSDT",
+                        "interval": "60",
+                        "timezone": "Etc/UTC",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "toolbar_bg": "#0b0f17",
+                        "enable_publishing": false,
+                        "hide_side_toolbar": false,
+                        "allow_symbol_change": true,
+                        "container_id": "tradingview_chart"
+                    });
+                </script>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
         <!-- Company Certification & Statistics -->
         <section id="stats" class="card-grey p-8 md:p-12 space-y-8 text-center">
@@ -349,9 +372,6 @@
 
     <!-- Chart Script Initialization -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('tv-chart');
-            if (container) {
                 const chart = LightweightCharts.createChart(container, {
                     layout: { backgroundColor: 'transparent', textColor: '#94A3B8' },
                     grid: { vertLines: { color: 'rgba(255, 255, 255, 0.05)' }, horzLines: { color: 'rgba(255, 255, 255, 0.05)' } },

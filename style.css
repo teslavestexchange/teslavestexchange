@@ -105,3 +105,22 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #00E676;
 }
+/* Prevent horizontal overflow globally */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure all elements calculate border and padding inside their width */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Constrain embedded elements, charts, and media to container bounds */
+img, video, canvas, iframe, svg {
+    max-width: 100%;
+    height: auto;
+}

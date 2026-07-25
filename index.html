@@ -192,26 +192,221 @@
             </div>
         </section>
 
-     <!-- Live Candlestick & Market Indices Chart -->
-<section class="space-y-6">
-    <div class="flex justify-between items-center">
-        <h3 class="font-display text-xl font-bold uppercase text-white">Market Terminal Stream</h3>
-        <span class="text-xs font-mono text-neon-green bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">• LIVE FEED</span>
+   <!-- Custom Market Terminal Dashboard -->
+<section class="space-y-6 max-w-full overflow-hidden">
+    <div class="flex justify-between items-center px-1">
+        <h3 class="font-display text-xl font-bold uppercase text-white tracking-wider">Market Overview</h3>
+        <span class="text-xs font-mono text-neon-green bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> LIVE STREAM
+        </span>
     </div>
-    
-    <div class="card-grey p-4 md:p-6 space-y-4">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-            <div>
-                <h4 class="font-bold text-white font-mono text-lg">BTC / USD Spot</h4>
-                <p class="text-xs text-slate-400 font-mono">Custom Native Candlestick Terminal</p>
+
+    <div class="card-grey p-3 sm:p-5 space-y-6 rounded-2xl border border-slate-800 bg-slate-950/90 shadow-2xl">
+        
+        <!-- 1. TOP GREEN AREA CHART & TIMELINE PILLS -->
+        <div class="space-y-4">
+            <!-- Time Frame Selector Pills -->
+            <div class="flex items-center justify-between gap-1 border-b border-slate-800/80 pb-3 overflow-x-auto text-xs font-mono">
+                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">1D</button>
+                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">1M</button>
+                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">3M</button>
+                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-900 bg-slate-200 font-bold shadow transition">1Y</button>
+                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">5Y</button>
+                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">All</button>
             </div>
-            <span class="text-neon-green font-mono font-bold text-lg" id="live-price">$64,250.00 (+1.85%)</span>
+
+            <!-- SVG Line & Area Chart Container -->
+            <div class="w-full h-40 relative rounded-xl bg-slate-900/50 p-2 border border-slate-800/60 overflow-hidden">
+                <svg class="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#10B981" stop-opacity="0.35"/>
+                            <stop offset="100%" stop-color="#10B981" stop-opacity="0.0"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Gradient Filled Area -->
+                    <path id="chartAreaPath" fill="url(#chartGradient)" d="M 0,80 Q 50,70 100,85 T 200,60 T 300,75 T 400,30 T 500,10 L 500,120 L 0,120 Z"></path>
+                    <!-- Glowing Line -->
+                    <path id="chartLinePath" fill="none" stroke="#10B981" stroke-width="2.5" d="M 0,80 Q 50,70 100,85 T 200,60 T 300,75 T 400,30 T 500,10"></path>
+                </svg>
+                <!-- Chart Timeline Labels -->
+                <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-1 px-1">
+                    <span>Aug</span>
+                    <span>15</span>
+                    <span class="text-emerald-400 font-bold">2026</span>
+                    <span>Apr</span>
+                    <span>Jul</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Custom Canvas Container -->
-        <div class="w-full h-[400px] relative bg-navy-950 rounded-xl border border-slate-800/80 overflow-hidden p-2">
-            <canvas id="customCandleChart" class="w-full h-full block"></canvas>
+        <!-- 2. PAIRS & INDICES LIST -->
+        <div class="divide-y divide-slate-800/80 font-mono text-sm">
+            <!-- SPX500USD -->
+            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-red-600/90 text-white font-bold text-xs flex items-center justify-center shadow">500</div>
+                    <div>
+                        <div class="text-white font-bold flex items-center gap-1">SPX500USD <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
+                        <div class="text-[11px] text-slate-400 font-sans">S&P 500</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-white font-bold" id="price-spx">7,415.8</div>
+                    <div class="text-xs text-red-500 flex items-center justify-end gap-1" id="change-spx">-10.2 (-0.14%)</div>
+                </div>
+            </div>
+
+            <!-- NAS100USD -->
+            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-sky-600/90 text-white font-bold text-xs flex items-center justify-center shadow">100</div>
+                    <div>
+                        <div class="text-white font-bold flex items-center gap-1">NAS100USD <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
+                        <div class="text-[11px] text-slate-400 font-sans">Nasdaq 100</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-white font-bold" id="price-nas">28,170.0</div>
+                    <div class="text-xs text-red-500 flex items-center justify-end gap-1" id="change-nas">-437.6 (-1.53%)</div>
+                </div>
+            </div>
+
+            <!-- DJI -->
+            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-cyan-600/90 text-white font-bold text-xs flex items-center justify-center shadow">30</div>
+                    <div>
+                        <div class="text-white font-bold flex items-center gap-1">DJI <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
+                        <div class="text-[11px] text-slate-400 font-sans">Dow 30</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-white font-bold" id="price-dji">51,902.3</div>
+                    <div class="text-xs text-emerald-400 flex items-center justify-end gap-1" id="change-dji">+175.5 (+0.34%)</div>
+                </div>
+            </div>
+
+            <!-- NKY -->
+            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-700/90 text-white font-bold text-[10px] flex items-center justify-center shadow">225</div>
+                    <div>
+                        <div class="text-white font-bold flex items-center gap-1">NKY <span class="text-[10px] text-purple-400 font-sans">E</span> <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
+                        <div class="text-[11px] text-slate-400 font-sans">Nikkei 225</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-white font-bold" id="price-nky">64,611.15</div>
+                    <div class="text-xs text-red-500 flex items-center justify-end gap-1" id="change-nky">-1,811.45 (-2.73%)</div>
+                </div>
+            </div>
+
+            <!-- DEU30 -->
+            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-indigo-600/90 text-white font-bold text-xs flex items-center justify-center shadow">DAX</div>
+                    <div>
+                        <div class="text-white font-bold flex items-center gap-1">DEU30 <span class="text-[10px] text-purple-400 font-sans">E</span> <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
+                        <div class="text-[11px] text-slate-400 font-sans">Germany 40</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-white font-bold" id="price-deu">25,099.00</div>
+                    <div class="text-xs text-emerald-400 flex items-center justify-end gap-1" id="change-deu">+84.20 (+0.34%)</div>
+                </div>
+            </div>
         </div>
+
+        <!-- 3. FOREX CROSS RATES MATRIX TABLE -->
+        <div class="space-y-3 pt-2">
+            <h4 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider">Forex Cross Rates Matrix</h4>
+            <div class="w-full overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60">
+                <table class="w-full text-center text-xs font-mono border-collapse min-w-[320px]">
+                    <thead>
+                        <tr class="bg-slate-950 border-b border-slate-800 text-slate-300">
+                            <th class="p-2 border-r border-slate-800"></th>
+                            <th class="p-2 border-r border-slate-800">🇪🇺 EUR</th>
+                            <th class="p-2 border-r border-slate-800">🇺🇸 USD</th>
+                            <th class="p-2 border-r border-slate-800">🇯🇵 JPY</th>
+                            <th class="p-2 border-r border-slate-800">🇬🇧 GBP</th>
+                            <th class="p-2">🇨🇭 CHF</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/80 text-slate-200">
+                        <tr>
+                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇪🇺 EUR</td>
+                            <td class="p-2 bg-slate-900/40 text-slate-500 border-r border-slate-800">—</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-eur-usd">1.13650</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-eur-jpy">186.237</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-eur-gbp">0.85317</td>
+                            <td class="p-2" id="fx-eur-chf">0.92410</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇺🇸 USD</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-usd-eur">0.87920</td>
+                            <td class="p-2 bg-slate-900/40 text-slate-500 border-r border-slate-800">—</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-usd-jpy">163.791</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-usd-gbp">0.75083</td>
+                            <td class="p-2" id="fx-usd-chf">0.81310</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇯🇵 JPY</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-jpy-eur">0.00537</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-jpy-usd">0.00610</td>
+                            <td class="p-2 bg-slate-900/40 text-slate-500 border-r border-slate-800">—</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-jpy-gbp">0.00458</td>
+                            <td class="p-2" id="fx-jpy-chf">0.00496</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇬🇧 GBP</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-gbp-eur">1.17170</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-gbp-usd">1.33190</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-gbp-jpy">218.282</td>
+                            <td class="p-2 bg-slate-900/40 text-slate-500 border-r border-slate-800">—</td>
+                            <td class="p-2" id="fx-gbp-chf">1.08310</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇨🇭 CHF</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-chf-eur">1.07470</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-chf-usd">1.22180</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-chf-jpy">200.224</td>
+                            <td class="p-2 border-r border-slate-800" id="fx-chf-gbp">0.91680</td>
+                            <td class="p-2 bg-slate-900/40 text-slate-500">—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BOTTOM TICKER MINI CARDS -->
+        <div class="grid grid-cols-3 gap-2 pt-1 font-mono text-xs">
+            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800/80 space-y-1">
+                <div class="text-[11px] text-slate-400 flex items-center justify-between">
+                    <span>EUR/USD</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                </div>
+                <div class="font-bold text-white text-sm" id="ticker-eurusd">1.13650</div>
+                <div class="text-[10px] text-red-500" id="ticker-eurusd-chg">-0.00106 (-0.09%)</div>
+            </div>
+            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800/80 space-y-1">
+                <div class="text-[11px] text-slate-400 flex items-center justify-between">
+                    <span>BTC/USD</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                </div>
+                <div class="font-bold text-white text-sm" id="ticker-btcusd">64,138.00</div>
+                <div class="text-[10px] text-emerald-400" id="ticker-btcusd-chg">+51.00 (+0.08%)</div>
+            </div>
+            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800/80 space-y-1">
+                <div class="text-[11px] text-slate-400 flex items-center justify-between">
+                    <span>ETH/USD</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                </div>
+                <div class="font-bold text-white text-sm" id="ticker-ethusd">1,866.30</div>
+                <div class="text-[10px] text-emerald-400" id="ticker-ethusd-chg">+6.20 (+0.33%)</div>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -463,6 +658,63 @@
     // Render on load and window resize
     window.addEventListener('DOMContentLoaded', drawCustomChart);
     window.addEventListener('resize', drawCustomChart);
+</script>
+<script>
+    // Timeframe Pills Active State Toggle
+    function selectTimeframe(btn) {
+        const buttons = btn.parentElement.querySelectorAll('button');
+        buttons.forEach(b => {
+            b.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+        });
+        btn.className = "px-3 py-1.5 rounded-lg text-slate-900 bg-slate-200 font-bold shadow transition";
+    }
+
+    // Dynamic Price Simulation Logic
+    function simulateMarketFluctuations() {
+        const randomize = (val, maxDelta, decimals = 2) => {
+            const delta = (Math.random() - 0.49) * maxDelta;
+            return (parseFloat(val.replace(/,/g, '')) + delta).toFixed(decimals);
+        };
+
+        const formatNum = (num) => Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        // SPX500
+        const spxEl = document.getElementById('price-spx');
+        if (spxEl) spxEl.innerText = formatNum(randomize(spxEl.innerText, 1.2));
+
+        // NAS100
+        const nasEl = document.getElementById('price-nas');
+        if (nasEl) nasEl.innerText = formatNum(randomize(nasEl.innerText, 3.5));
+
+        // BTC/USD
+        const btcEl = document.getElementById('ticker-btcusd');
+        if (btcEl) btcEl.innerText = formatNum(randomize(btcEl.innerText, 12.0));
+
+        // EUR/USD
+        const eurEl = document.getElementById('fx-eur-usd');
+        if (eurEl) {
+            const newVal = randomize(eurEl.innerText, 0.00012, 5);
+            eurEl.innerText = newVal;
+            const tickerEur = document.getElementById('ticker-eurusd');
+            if (tickerEur) tickerEur.innerText = newVal;
+        }
+
+        // Morph top SVG path slightly for living movement
+        const linePath = document.getElementById('chartLinePath');
+        const areaPath = document.getElementById('chartAreaPath');
+        if (linePath && areaPath) {
+            const p1 = Math.floor(65 + Math.random() * 15);
+            const p2 = Math.floor(55 + Math.random() * 15);
+            const p3 = Math.floor(25 + Math.random() * 10);
+            
+            const newD = `M 0,80 Q 50,70 100,${p1} T 200,60 T 300,${p2} T 400,${p3} T 500,10`;
+            linePath.setAttribute('d', newD);
+            areaPath.setAttribute('d', `${newD} L 500,120 L 0,120 Z`);
+        }
+    }
+
+    // Run simulation loop every 2.5 seconds
+    setInterval(simulateMarketFluctuations, 2500);
 </script>
 </body>
 </html>

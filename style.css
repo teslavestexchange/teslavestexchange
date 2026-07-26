@@ -154,3 +154,36 @@ body {
         overflow-wrap: break-word;
     }
 </style>
+/* Universal Color Overrides for Deep Navy, Gold, and Green Theme */
+body {
+    background-color: #030712 !important; /* Deep Midnight */
+    color: #F8FAFC !important;
+}
+
+/* Card Container Overrides */
+.card-grey, 
+div[class*="bg-slate-900"], 
+div[class*="bg-slate-950"] {
+    background-color: rgba(11, 25, 44, 0.95) !important; /* Deep Royal Navy */
+    border-color: #1E3E62 !important; /* Glowing Blue Border */
+    box-shadow: 0 0 20px rgba(30, 62, 98, 0.25) !important;
+}
+
+/* Accent Glow Text Overrides */
+.text-neon-green, 
+.text-emerald-400 {
+    color: #00E676 !important;
+    text-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
+}
+
+/* Button & Highlight Overrides */
+.bg-neon-green {
+    background-color: #FFD700 !important; /* Primary Action Buttons to Glowing Gold */
+    color: #030712 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.4) !important;
+}
+
+.bg-neon-green:hover {
+    background-color: #E6C200 !important;
+}

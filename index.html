@@ -294,256 +294,198 @@
             </div>
         </section>
 
-   <!-- Custom Market Terminal Dashboard -->
-<section class="space-y-6 max-w-full overflow-hidden">
+<!-- Glowing Live Market Terminal Section -->
+<section class="space-y-6 max-w-full overflow-hidden px-3 sm:px-6 my-10">
+    <!-- Header Title -->
     <div class="flex justify-between items-center px-1">
-        <h3 class="font-display text-xl font-bold uppercase text-white tracking-wider">Market Overview</h3>
-        <span class="text-xs font-mono text-neon-green bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> LIVE STREAM
+        <h3 class="font-display text-xl font-black uppercase text-brand-gold glow-gold-text tracking-wider">
+            Market Overview
+        </h3>
+        <span class="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-3 py-1 rounded-full border border-cyan-500/40 flex items-center gap-1.5 shadow-[0_0_12px_rgba(56,189,248,0.3)]">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span> LIVE ENGINE
         </span>
     </div>
 
-    <div class="card-grey p-3 sm:p-5 space-y-6 rounded-2xl border border-slate-800 bg-slate-950/90 shadow-2xl">
+    <!-- Terminal Box Container -->
+    <div class="p-4 sm:p-6 space-y-6 rounded-2xl border border-sky-900/60 bg-navy-900/90 glow-card backdrop-blur-md">
         
-        <!-- 1. TOP GREEN AREA CHART & TIMELINE PILLS -->
+        <!-- 1. GLOWING BLUE LIVE SVG CHART -->
         <div class="space-y-4">
-            <!-- Time Frame Selector Pills -->
-            <div class="flex items-center justify-between gap-1 border-b border-slate-800/80 pb-3 overflow-x-auto text-xs font-mono">
-                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">1D</button>
-                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">1M</button>
-                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">3M</button>
-                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-900 bg-slate-200 font-bold shadow transition">1Y</button>
-                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">5Y</button>
-                <button onclick="selectTimeframe(this)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">All</button>
+            <!-- Timeframe selector buttons -->
+            <div class="flex items-center justify-between gap-1 border-b border-navy-800 pb-3 overflow-x-auto text-xs font-mono">
+                <button class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-cyan-400 transition">1D</button>
+                <button class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-cyan-400 transition">1M</button>
+                <button class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-cyan-400 transition">3M</button>
+                <button class="px-3 py-1.5 rounded-lg text-slate-950 bg-cyan-400 font-bold shadow-[0_0_12px_rgba(56,189,248,0.6)] transition">1Y</button>
+                <button class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-cyan-400 transition">5Y</button>
+                <button class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-cyan-400 transition">ALL</button>
             </div>
 
-            <!-- SVG Line & Area Chart Container -->
-            <div class="w-full h-40 relative rounded-xl bg-slate-900/50 p-2 border border-slate-800/60 overflow-hidden">
+            <!-- Interactive SVG Area Chart -->
+            <div class="w-full h-44 relative rounded-xl bg-navy-950/90 p-2 border border-sky-900/50 overflow-hidden">
                 <svg class="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
                     <defs>
-                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#10B981" stop-opacity="0.35"/>
-                            <stop offset="100%" stop-color="#10B981" stop-opacity="0.0"/>
+                        <!-- Blue Gradient Fill Under Path -->
+                        <linearGradient id="blueGradientFill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.45"/>
+                            <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.0"/>
                         </linearGradient>
+
+                        <!-- High Intensity Glowing Filter for Neon Blue Line -->
+                        <filter id="neonBlueGlow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feGaussianBlur stdDeviation="3.5" result="blur" />
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
                     </defs>
-                    <!-- Gradient Filled Area -->
-                    <path id="chartAreaPath" fill="url(#chartGradient)" d="M 0,80 Q 50,70 100,85 T 200,60 T 300,75 T 400,30 T 500,10 L 500,120 L 0,120 Z"></path>
-                    <!-- Glowing Line -->
-                    <path id="chartLinePath" fill="none" stroke="#10B981" stroke-width="2.5" d="M 0,80 Q 50,70 100,85 T 200,60 T 300,75 T 400,30 T 500,10"></path>
+
+                    <!-- Filled Area -->
+                    <path id="chartAreaPath" fill="url(#blueGradientFill)" d="M 0,80 Q 50,70 100,85 T 200,60 T 300,75 T 400,30 T 500,10 L 500,120 L 0,120 Z" class="transition-all duration-700 ease-in-out"></path>
+                    
+                    <!-- Glowing Blue Stroke Line -->
+                    <path id="chartLinePath" fill="none" stroke="#38BDF8" stroke-width="3" filter="url(#neonBlueGlow)" d="M 0,80 Q 50,70 100,85 T 200,60 T 300,75 T 400,30 T 500,10" class="transition-all duration-700 ease-in-out"></path>
                 </svg>
-                <!-- Chart Timeline Labels -->
+
                 <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-1 px-1">
-                    <span>Aug</span>
-                    <span>15</span>
-                    <span class="text-emerald-400 font-bold">2026</span>
-                    <span>Apr</span>
-                    <span>Jul</span>
+                    <span>JAN</span>
+                    <span>APR</span>
+                    <span class="text-brand-gold font-bold glow-gold-text">2026 LIVE</span>
+                    <span>OCT</span>
+                    <span>DEC</span>
                 </div>
             </div>
         </div>
 
-        <!-- 2. PAIRS & INDICES LIST -->
-        <div class="divide-y divide-slate-800/80 font-mono text-sm">
-            <!-- SPX500USD -->
-            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
+        <!-- 2. REAL-TIME TICKER LIST (UPDATES EVERY 1.5s) -->
+        <div class="divide-y divide-navy-800 font-mono text-sm">
+            
+            <!-- SPX 500 -->
+            <div class="py-3 flex items-center justify-between hover:bg-navy-800/40 px-2 rounded-lg transition">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-red-600/90 text-white font-bold text-xs flex items-center justify-center shadow">500</div>
+                    <div class="w-8 h-8 rounded-full bg-brand-gold/20 border border-brand-gold/50 text-brand-gold font-bold text-xs flex items-center justify-center shadow">500</div>
                     <div>
-                        <div class="text-white font-bold flex items-center gap-1">SPX500USD <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
-                        <div class="text-[11px] text-slate-400 font-sans">S&P 500</div>
+                        <div class="text-white font-bold flex items-center gap-1">SPX500USD <span class="w-1.5 h-1.5 rounded-full bg-brand-gold"></span></div>
+                        <div class="text-[11px] text-slate-400 font-sans">S&P 500 Index</div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="text-white font-bold" id="price-spx">7,415.8</div>
-                    <div class="text-xs text-red-500 flex items-center justify-end gap-1" id="change-spx">-10.2 (-0.14%)</div>
+                    <div class="text-white font-bold transition-colors duration-300" id="price-spx">7,415.80</div>
+                    <div class="text-xs text-brand-green flex items-center justify-end gap-1" id="change-spx">+12.4 (+0.17%)</div>
                 </div>
             </div>
 
-            <!-- NAS100USD -->
-            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
+            <!-- NAS 100 -->
+            <div class="py-3 flex items-center justify-between hover:bg-navy-800/40 px-2 rounded-lg transition">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-sky-600/90 text-white font-bold text-xs flex items-center justify-center shadow">100</div>
+                    <div class="w-8 h-8 rounded-full bg-sky-600/30 border border-sky-400/50 text-sky-300 font-bold text-xs flex items-center justify-center shadow">100</div>
                     <div>
-                        <div class="text-white font-bold flex items-center gap-1">NAS100USD <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
-                        <div class="text-[11px] text-slate-400 font-sans">Nasdaq 100</div>
+                        <div class="text-white font-bold flex items-center gap-1">NAS100USD <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span></div>
+                        <div class="text-[11px] text-slate-400 font-sans">Nasdaq Tech 100</div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="text-white font-bold" id="price-nas">28,170.0</div>
-                    <div class="text-xs text-red-500 flex items-center justify-end gap-1" id="change-nas">-437.6 (-1.53%)</div>
+                    <div class="text-white font-bold transition-colors duration-300" id="price-nas">28,170.00</div>
+                    <div class="text-xs text-red-400 flex items-center justify-end gap-1" id="change-nas">-142.6 (-0.50%)</div>
                 </div>
             </div>
 
-            <!-- DJI -->
-            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
+            <!-- DOW 30 -->
+            <div class="py-3 flex items-center justify-between hover:bg-navy-800/40 px-2 rounded-lg transition">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-cyan-600/90 text-white font-bold text-xs flex items-center justify-center shadow">30</div>
+                    <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-brand-green/50 text-brand-green font-bold text-xs flex items-center justify-center shadow">30</div>
                     <div>
-                        <div class="text-white font-bold flex items-center gap-1">DJI <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
-                        <div class="text-[11px] text-slate-400 font-sans">Dow 30</div>
+                        <div class="text-white font-bold flex items-center gap-1">DJI <span class="w-1.5 h-1.5 rounded-full bg-brand-green"></span></div>
+                        <div class="text-[11px] text-slate-400 font-sans">Dow Jones Industrial</div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="text-white font-bold" id="price-dji">51,902.3</div>
-                    <div class="text-xs text-emerald-400 flex items-center justify-end gap-1" id="change-dji">+175.5 (+0.34%)</div>
+                    <div class="text-white font-bold transition-colors duration-300" id="price-dji">51,902.30</div>
+                    <div class="text-xs text-brand-green flex items-center justify-end gap-1" id="change-dji">+175.5 (+0.34%)</div>
                 </div>
             </div>
 
-            <!-- NKY -->
-            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
+            <!-- BITCOIN -->
+            <div class="py-3 flex items-center justify-between hover:bg-navy-800/40 px-2 rounded-lg transition">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-700/90 text-white font-bold text-[10px] flex items-center justify-center shadow">225</div>
+                    <div class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-400 font-bold text-xs flex items-center justify-center shadow">₿</div>
                     <div>
-                        <div class="text-white font-bold flex items-center gap-1">NKY <span class="text-[10px] text-purple-400 font-sans">E</span> <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
-                        <div class="text-[11px] text-slate-400 font-sans">Nikkei 225</div>
+                        <div class="text-white font-bold flex items-center gap-1">BTC/USD <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span></div>
+                        <div class="text-[11px] text-slate-400 font-sans">Bitcoin Spot</div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="text-white font-bold" id="price-nky">64,611.15</div>
-                    <div class="text-xs text-red-500 flex items-center justify-end gap-1" id="change-nky">-1,811.45 (-2.73%)</div>
+                    <div class="text-white font-bold transition-colors duration-300" id="price-btc">63,973.00</div>
+                    <div class="text-xs text-brand-green flex items-center justify-end gap-1" id="change-btc">+890.1 (+1.41%)</div>
                 </div>
             </div>
 
-            <!-- DEU30 -->
-            <div class="py-3 flex items-center justify-between hover:bg-slate-900/40 px-2 rounded-lg transition">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-indigo-600/90 text-white font-bold text-xs flex items-center justify-center shadow">DAX</div>
-                    <div>
-                        <div class="text-white font-bold flex items-center gap-1">DEU30 <span class="text-[10px] text-purple-400 font-sans">E</span> <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span></div>
-                        <div class="text-[11px] text-slate-400 font-sans">Germany 40</div>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <div class="text-white font-bold" id="price-deu">25,099.00</div>
-                    <div class="text-xs text-emerald-400 flex items-center justify-end gap-1" id="change-deu">+84.20 (+0.34%)</div>
-                </div>
-            </div>
         </div>
-
-        <!-- 3. FOREX CROSS RATES MATRIX TABLE -->
-        <div class="space-y-3 pt-2">
-            <h4 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider">Forex Cross Rates Matrix</h4>
-            <div class="w-full overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60">
-                <table class="w-full text-center text-xs font-mono border-collapse min-w-[320px]">
-                    <thead>
-                        <tr class="bg-slate-950 border-b border-slate-800 text-slate-300">
-                            <th class="p-2 border-r border-slate-800"></th>
-                            <th class="p-2 border-r border-slate-800">🇪🇺 EUR</th>
-                            <th class="p-2 border-r border-slate-800">🇺🇸 USD</th>
-                            <th class="p-2 border-r border-slate-800">🇯🇵 JPY</th>
-                            <th class="p-2 border-r border-slate-800">🇬🇧 GBP</th>
-                            <th class="p-2">🇨🇭 CHF</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-800/80 text-slate-200">
-                        <tr>
-                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇪🇺 EUR</td>
-                            <td class="p-2 bg-slate-900/40 text-slate-500 border-r border-slate-800">—</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-eur-usd">1.13650</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-eur-jpy">186.237</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-eur-gbp">0.85317</td>
-                            <td class="p-2" id="fx-eur-chf">0.92410</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇺🇸 USD</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-usd-eur">0.87920</td>
-                            <td class="p-2 bg-slate-900/40 text-slate-500 border-r border-slate-800">—</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-usd-jpy">163.791</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-usd-gbp">0.75083</td>
-                            <td class="p-2" id="fx-usd-chf">0.81310</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇯🇵 JPY</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-jpy-eur">0.00537</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-jpy-usd">0.00610</td>
-                            <td class="p-2 bg-slate-900/40 text-slate-500 border-r border-slate-800">—</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-jpy-gbp">0.00458</td>
-                            <td class="p-2" id="fx-jpy-chf">0.00496</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇬🇧 GBP</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-gbp-eur">1.17170</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-gbp-usd">1.33190</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-gbp-jpy">218.282</td>
-                            <td class="p-2 bg-slate-900/40 text-slate-500 border-r border-slate-800">—</td>
-                            <td class="p-2" id="fx-gbp-chf">1.08310</td>
-                        </tr>
-                        <tr>
-                            <td class="p-2 bg-slate-950 font-bold border-r border-slate-800 text-left">🇨🇭 CHF</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-chf-eur">1.07470</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-chf-usd">1.22180</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-chf-jpy">200.224</td>
-                            <td class="p-2 border-r border-slate-800" id="fx-chf-gbp">0.91680</td>
-                            <td class="p-2 bg-slate-900/40 text-slate-500">—</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- BOTTOM TICKER MINI CARDS -->
-        <div class="grid grid-cols-3 gap-2 pt-1 font-mono text-xs">
-            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800/80 space-y-1">
-                <div class="text-[11px] text-slate-400 flex items-center justify-between">
-                    <span>EUR/USD</span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                </div>
-                <div class="font-bold text-white text-sm" id="ticker-eurusd">1.13650</div>
-                <div class="text-[10px] text-red-500" id="ticker-eurusd-chg">-0.00106 (-0.09%)</div>
-            </div>
-            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800/80 space-y-1">
-                <div class="text-[11px] text-slate-400 flex items-center justify-between">
-                    <span>BTC/USD</span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                </div>
-                <div class="font-bold text-white text-sm" id="ticker-btcusd">64,138.00</div>
-                <div class="text-[10px] text-emerald-400" id="ticker-btcusd-chg">+51.00 (+0.08%)</div>
-            </div>
-            <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800/80 space-y-1">
-                <div class="text-[11px] text-slate-400 flex items-center justify-between">
-                    <span>ETH/USD</span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                </div>
-                <div class="font-bold text-white text-sm" id="ticker-ethusd">1,866.30</div>
-                <div class="text-[10px] text-emerald-400" id="ticker-ethusd-chg">+6.20 (+0.33%)</div>
-            </div>
-        </div>
-
     </div>
 </section>
 
-        <!-- Company Certification & Statistics -->
-        <section id="stats" class="card-grey p-8 md:p-12 space-y-8 text-center">
-            <div class="space-y-2">
-                <h2 class="font-display text-3xl font-extrabold uppercase text-white">Officially Registered Company</h2>
-                <p class="text-neon-green font-mono font-bold text-xl">LICENSE #13699699</p>
-            </div>
+<!-- 3. LIVE DATA TICKER JAVASCRIPT (1.5 SECOND INTERVAL) -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initial Asset States
+        const assets = [
+            { id: 'spx', price: 7415.80, base: 7400.00 },
+            { id: 'nas', price: 28170.00, base: 28300.00 },
+            { id: 'dji', price: 51902.30, base: 51720.00 },
+            { id: 'btc', price: 63973.00, base: 63000.00 }
+        ];
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-left">
-                <div class="space-y-4">
-                    <p class="text-slate-300 text-sm leading-relaxed">
-                        Teslavestexchange is fully registered and licensed for global investment management and algorithmic asset trading activities under UK Companies House verification.
-                    </p>
-                    <div class="grid grid-cols-2 gap-4 pt-4">
-                        <div class="plan-card-featured p-4 rounded-xl text-slate-950 font-mono">
-                            <p class="text-xs font-bold uppercase">Days Active</p>
-                            <p class="text-3xl font-extrabold">712</p>
-                        </div>
-                        <div class="bg-navy-950 border border-slate-800 p-4 rounded-xl font-mono">
-                            <p class="text-xs text-slate-400 uppercase">Total Members</p>
-                            <p class="text-3xl font-extrabold text-white">89,650</p>
-                        </div>
-                    </div>
-                </div>
+        // 1.5 Second Live Market Engine
+        setInterval(() => {
+            assets.forEach(asset => {
+                const elPrice = document.getElementById(`price-${asset.id}`);
+                const elChange = document.getElementById(`change-${asset.id}`);
+                if (!elPrice || !elChange) return;
 
-                <div class="bg-navy-950 p-6 rounded-xl border border-slate-800 space-y-3 font-mono text-xs">
-                    <div class="border-b border-slate-800 pb-2 text-neon-green font-bold text-sm">UK Incorporation Certificate</div>
-                    <p class="text-slate-400"><strong>Reg name:</strong> RealGrowth LTD / Teslavest</p>
-                    <p class="text-slate-400"><strong>Official Number:</strong> #13699699</p>
-                    <p class="text-slate-400"><strong>Official Address:</strong> 48 Warwick Street, London, England, W1B 5AW</p>
-                </div>
-            </div>
-        </section>
+                // Random market price movement (-0.15% to +0.15%)
+                const deltaPercent = (Math.random() - 0.48) * 0.003;
+                const newPrice = asset.price * (1 + deltaPercent);
+                const diff = newPrice - asset.base;
+                const percentChange = (diff / asset.base) * 100;
+                
+                const isUp = newPrice >= asset.price;
+                asset.price = newPrice;
+
+                // Format Price & Change strings
+                const formattedPrice = newPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const sign = diff >= 0 ? '+' : '';
+                const colorClass = diff >= 0 ? 'text-brand-green' : 'text-red-400';
+
+                // DOM Updates
+                elPrice.textContent = formattedPrice;
+                elChange.textContent = `${sign}${diff.toFixed(1)} (${sign}${percentChange.toFixed(2)}%)`;
+                elChange.className = `text-xs flex items-center justify-end gap-1 ${colorClass}`;
+
+                // Live Flash Effect on text (Cyan glow on change)
+                elPrice.style.color = isUp ? '#00E676' : '#F87171';
+                setTimeout(() => {
+                    elPrice.style.color = '#FFFFFF';
+                }, 400);
+            });
+
+            // Live SVG Chart Path Ripple Animation
+            const chartLine = document.getElementById('chartLinePath');
+            const chartArea = document.getElementById('chartAreaPath');
+            if (chartLine && chartArea) {
+                const y1 = 70 + (Math.random() - 0.5) * 18;
+                const y2 = 30 + (Math.random() - 0.5) * 18;
+                const y3 = 10 + (Math.random() - 0.5) * 12;
+                
+                const dLine = `M 0,80 Q 50,${y1.toFixed(0)} 100,85 T 200,60 T 300,75 T 400,${y2.toFixed(0)} T 500,${y3.toFixed(0)}`;
+                const dArea = `${dLine} L 500,120 L 0,120 Z`;
+                
+                chartLine.setAttribute('d', dLine);
+                chartArea.setAttribute('d', dArea);
+            }
+        }, 1500); // 1500ms = 1.5 seconds
+    });
+</script>
 
         <!-- Real-Time Deposits & Withdrawals -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-8">

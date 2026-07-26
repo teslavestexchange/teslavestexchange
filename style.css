@@ -134,3 +134,23 @@ body {
         box-sizing: border-box;
     }
 </style>
+<style>
+    /* Force all text, headers, and elements to stay within parent width */
+    *, *::before, *::after {
+        box-sizing: border-box !important;
+        max-width: 100% !important;
+    }
+
+    body {
+        width: 100% !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Prevent large titles from overflowing on small screens */
+    h1, h2, h3, h4, p, span {
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+</style>

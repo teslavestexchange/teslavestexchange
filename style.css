@@ -120,3 +120,17 @@ body {
 .animate-marquee:hover {
     animation-play-state: paused;
 }
+<style>
+    /* Absolute guard against horizontal scrolling */
+    html, body {
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+</style>

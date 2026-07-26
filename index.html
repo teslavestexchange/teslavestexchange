@@ -64,35 +64,32 @@
 <body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col justify-between">
 
 
-    <!-- Main Header / Navigation -->
-    <header class="border-b border-slate-800/80 bg-navy-900/80 backdrop-blur-md sticky top-9 z-40">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            
-            <!-- Brand Logo -->
-            <a href="/" class="flex items-center space-x-3 shrink-0 mr-8">
-                <div class="w-10 h-10 rounded-xl bg-neon-gradient flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                    <span class="font-display font-extrabold text-slate-950 text-xl">T</span>
-                </div>
-                <span class="font-display text-lg sm:text-xl font-extrabold tracking-wider text-white">
-                    TESLAVEST<span class="text-neon-green">EXCHANGE</span>
-                </span>
-            </a>
-
-            <!-- Navigation Links -->
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-300">
-                <a href="#proposals" class="hover:text-neon-green transition-colors">Plans</a>
-                <a href="#stats" class="hover:text-neon-green transition-colors">Statistics</a>
-                <a href="#referral" class="hover:text-neon-green transition-colors">Affiliate</a>
-                <a href="#payments" class="hover:text-neon-green transition-colors">Payments</a>
-            </nav>
-
-            <!-- Auth Buttons -->
-            <div class="flex items-center space-x-4">
-                <a href="/client/register.html" class="text-sm font-semibold text-slate-300 hover:text-white px-3 py-2 transition-colors">Log In</a>
-                <a href="/client/register.html" class="btn-neon-green px-5 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider">Open Deposit</a>
+<!-- Fully Responsive Main Header -->
+<header class="w-full max-w-full overflow-x-hidden bg-slate-950/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-2">
+        
+        <!-- Logo Section -->
+        <a href="/" class="flex items-center gap-2 min-w-0 shrink">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-bold text-slate-950 text-xl shadow-lg shadow-emerald-500/20 shrink-0">
+                T
             </div>
+            <span class="font-display font-extrabold text-white text-sm sm:text-lg tracking-wider truncate">
+                TESLAVEST<span class="text-neon-green">EXCHANGE</span>
+            </span>
+        </a>
+
+        <!-- Right Side Actions (Log In + Deposit) -->
+        <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+            <a href="/login" class="text-xs sm:text-sm font-bold text-slate-300 hover:text-white px-2 py-1.5 transition">
+                Log In
+            </a>
+            <a href="/deposit" class="bg-neon-green hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl uppercase tracking-wider transition shadow-lg shadow-emerald-500/20 whitespace-nowrap">
+                Open Deposit
+            </a>
         </div>
-    </header>
+
+    </div>
+</header>
 
     <!-- Main Content -->
     <main class="space-y-24 py-12 max-w-7xl mx-auto px-6">

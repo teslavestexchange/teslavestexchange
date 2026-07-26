@@ -501,52 +501,131 @@
     });
 </script>
 
-        <!-- Real-Time Deposits & Withdrawals -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Last Deposits -->
-            <div class="card-grey p-6 space-y-6">
-                <h3 class="font-display text-xl font-bold uppercase text-white border-b border-slate-800 pb-3 flex justify-between">
-                    <span>Last Deposits</span>
-                    <span class="text-neon-green text-sm">📥 LIVE</span>
-                </h3>
-                <div class="space-y-4 font-mono text-sm">
-                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
-                        <span class="text-white font-bold">Vagner</span>
-                        <span class="text-emerald-400">TRON • 860,000 TRX</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
-                        <span class="text-white font-bold">Austin132002</span>
-                        <span class="text-emerald-400">DOGECOIN • 5,000 DOGE</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
-                        <span class="text-white font-bold">Qinny</span>
-                        <span class="text-emerald-400">USDT TRC-20 • $1,800 USD</span>
-                    </div>
-                </div>
-            </div>
+      <!-- Real-Time Deposits & Withdrawals Section (Enhanced Neon/Gold Palette) -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 my-10 max-w-full overflow-hidden">
+    
+    <!-- Last Deposits Card -->
+    <div class="p-5 sm:p-6 space-y-6 bg-gradient-to-b from-[#0B192C] to-[#030712] border border-emerald-500/30 rounded-2xl shadow-[0_0_25px_rgba(0,230,118,0.08)] backdrop-blur-md">
+        <h3 class="font-display text-lg sm:text-xl font-black uppercase text-brand-gold border-b border-navy-800 pb-3 flex justify-between items-center glow-gold-text">
+            <span class="flex items-center gap-2">
+                <span class="text-brand-green text-base">📥</span> Last Deposits
+            </span>
+            <span class="text-brand-green text-xs font-mono bg-emerald-500/15 px-3 py-1 rounded-full border border-brand-green/40 flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,230,118,0.25)]">
+                <span class="w-2 h-2 rounded-full bg-brand-green animate-ping"></span> LIVE FEED
+            </span>
+        </h3>
+        <div id="deposits-container" class="space-y-3 font-mono text-xs sm:text-sm overflow-hidden">
+            <!-- Dynamic deposit feed items will mount here -->
+        </div>
+    </div>
 
-            <!-- Last Payments -->
-            <div class="card-grey p-6 space-y-6">
-                <h3 class="font-display text-xl font-bold uppercase text-white border-b border-slate-800 pb-3 flex justify-between">
-                    <span>Last Payments</span>
-                    <span class="text-neon-green text-sm">📤 LIVE</span>
-                </h3>
-                <div class="space-y-4 font-mono text-sm">
-                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
-                        <span class="text-white font-bold">Temirkhan</span>
-                        <span class="text-emerald-400">USDT TRC-20 • $139,887.45</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
-                        <span class="text-white font-bold">Aom2525</span>
-                        <span class="text-emerald-400">USDT TRC-20 • $5,660.26</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-navy-950 p-3 rounded-lg">
-                        <span class="text-white font-bold">Tik188</span>
-                        <span class="text-emerald-400">USDT TRC-20 • $14,212.17</span>
-                    </div>
+    <!-- Last Payments Card -->
+    <div class="p-5 sm:p-6 space-y-6 bg-gradient-to-b from-[#0B192C] to-[#030712] border border-cyan-500/30 rounded-2xl shadow-[0_0_25px_rgba(56,189,248,0.08)] backdrop-blur-md">
+        <h3 class="font-display text-lg sm:text-xl font-black uppercase text-brand-gold border-b border-navy-800 pb-3 flex justify-between items-center glow-gold-text">
+            <span class="flex items-center gap-2">
+                <span class="text-cyan-400 text-base">📤</span> Last Payments
+            </span>
+            <span class="text-cyan-400 text-xs font-mono bg-cyan-500/15 px-3 py-1 rounded-full border border-cyan-400/40 flex items-center gap-1.5 shadow-[0_0_12px_rgba(56,189,248,0.25)]">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span> LIVE FEED
+            </span>
+        </h3>
+        <div id="payments-container" class="space-y-3 font-mono text-xs sm:text-sm overflow-hidden">
+            <!-- Dynamic payment feed items will mount here -->
+        </div>
+    </div>
+
+</section>
+
+<!-- Auto-Generator & Color-Glow Feeder Script (3-Second Interval) -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Random Usernames
+    const prefixes = ['Alex', 'Dmitry', 'Satoshi', 'Kev', 'Elena', 'Marco', 'Viktor', 'Yuki', 'Chen', 'Zack', 'Alpha', 'Nova', 'Mateo', 'Aarav', 'Ryder', 'Tariq'];
+    const suffixes = ['99', 'Trader', '_X', 'Pro', '88', '_Btc', 'Hodl', '888', 'Vault', 'Whale', '77', '_VIP', '360', 'Master', 'Node'];
+
+    // Supported Assets & Formatting Rules
+    const assets = [
+        { name: 'USDT TRC-20', unit: 'USD', min: 350, max: 185000, prefix: '$' },
+        { name: 'BITCOIN', unit: 'BTC', min: 0.08, max: 3.8, prefix: '₿ ' },
+        { name: 'ETHEREUM', unit: 'ETH', min: 1.2, max: 45, prefix: 'Ξ ' },
+        { name: 'SOLANA', unit: 'SOL', min: 18, max: 620, prefix: '' },
+        { name: 'TRON', unit: 'TRX', min: 8000, max: 650000, prefix: '' },
+        { name: 'DOGECOIN', unit: 'DOGE', min: 6000, max: 140000, prefix: '' }
+    ];
+
+    function generateUsername() {
+        const p = prefixes[Math.floor(Math.random() * prefixes.length)];
+        const s = suffixes[Math.floor(Math.random() * suffixes.length)];
+        return `${p}${s}`;
+    }
+
+    function generateTransaction() {
+        const asset = assets[Math.floor(Math.random() * assets.length)];
+        const rawAmount = (Math.random() * (asset.max - asset.min) + asset.min);
+        
+        let formattedAmount;
+        if (asset.unit === 'BTC' || asset.unit === 'ETH') {
+            formattedAmount = rawAmount.toFixed(3);
+        } else if (asset.unit === 'USD') {
+            formattedAmount = rawAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        } else {
+            formattedAmount = Math.floor(rawAmount).toLocaleString();
+        }
+
+        return {
+            user: generateUsername(),
+            detail: `${asset.name} • ${asset.prefix}${formattedAmount} ${asset.unit}`
+        };
+    }
+
+    // Initial state feeds (3 rows per table)
+    const depositsList = [generateTransaction(), generateTransaction(), generateTransaction()];
+    const paymentsList = [generateTransaction(), generateTransaction(), generateTransaction()];
+
+    const depContainer = document.getElementById('deposits-container');
+    const payContainer = document.getElementById('payments-container');
+
+    function renderFeeds() {
+        if (depContainer) {
+            depContainer.innerHTML = depositsList.map((item, index) => `
+                <div class="flex justify-between items-center bg-[#030712]/90 p-3 sm:p-3.5 rounded-xl border ${index === 0 ? 'border-brand-green/80 bg-emerald-950/20 shadow-[0_0_15px_rgba(0,230,118,0.2)]' : 'border-navy-800/80'} transition-all duration-500">
+                    <span class="text-white font-bold flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full ${index === 0 ? 'bg-brand-green shadow-[0_0_8px_#00E676]' : 'bg-emerald-500/40'}"></span>
+                        <span class="truncate max-w-[110px] sm:max-w-none">${item.user}</span>
+                    </span>
+                    <span class="text-brand-green font-bold text-right ${index === 0 ? 'glow-green-text' : ''}">${item.detail}</span>
                 </div>
-            </div>
-        </section>
+            `).join('');
+        }
+
+        if (payContainer) {
+            payContainer.innerHTML = paymentsList.map((item, index) => `
+                <div class="flex justify-between items-center bg-[#030712]/90 p-3 sm:p-3.5 rounded-xl border ${index === 0 ? 'border-cyan-400/80 bg-cyan-950/20 shadow-[0_0_15px_rgba(56,189,248,0.2)]' : 'border-navy-800/80'} transition-all duration-500">
+                    <span class="text-white font-bold flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full ${index === 0 ? 'bg-cyan-400 shadow-[0_0_8px_#38BDF8]' : 'bg-cyan-500/40'}"></span>
+                        <span class="truncate max-w-[110px] sm:max-w-none">${item.user}</span>
+                    </span>
+                    <span class="text-cyan-300 font-bold text-right ${index === 0 ? 'glow-blue-text' : ''}">${item.detail}</span>
+                </div>
+            `).join('');
+        }
+    }
+
+    // Initial render
+    renderFeeds();
+
+    // Live update loop every 3 seconds
+    setInterval(() => {
+        depositsList.unshift(generateTransaction());
+        depositsList.pop();
+
+        paymentsList.unshift(generateTransaction());
+        paymentsList.pop();
+
+        renderFeeds();
+    }, 3000);
+});
+</script>
 
         <!-- Referral Program Section -->
         <section id="referral" class="card-grey p-8 text-center space-y-6 border-neon-green/20">

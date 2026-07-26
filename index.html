@@ -5,21 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teslavestexchange | Institutional Investment Engine</title>
 
-    <!-- Tailwind CSS -->
+<!-- Tailwind CSS with Dark Mode Support -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         navy: {
-                            950: '#0b0f17',
-                            900: '#121824',
-                            800: '#1a2332',
+                            950: '#030712', /* Deep Midnight Blue Body */
+                            900: '#0B192C', /* Deep Royal Navy Cards */
+                            800: '#1E3E62', /* Vibrant Blue Borders & Highlights */
                         },
-                        neon: {
-                            green: '#00E676'
+                        brand: {
+                            gold: '#FFD700',      /* Glowing Gold */
+                            goldHover: '#E6C200',
+                            green: '#00E676',     /* Neon Green */
+                            blue: '#1E3E62'       /* Accent Blue */
                         }
                     }
                 }
@@ -27,7 +31,7 @@
         }
     </script>
 
-    <!-- Global CSS Layout Guard -->
+    <!-- Global CSS Layout Guard & Custom Glowing Utilities -->
     <style>
         html, body {
             width: 100%;
@@ -35,12 +39,14 @@
             overflow-x: hidden !important;
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         *, *::before, *::after {
             box-sizing: border-box;
         }
 
+        /* Marquee Animation */
         @keyframes marquee {
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
@@ -55,7 +61,74 @@
         .animate-marquee:hover {
             animation-play-state: paused;
         }
+
+        /* Neon Glow Effects */
+        .glow-gold-text {
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .glow-green-text {
+            text-shadow: 0 0 12px rgba(0, 230, 118, 0.7), 0 0 25px rgba(0, 230, 118, 0.4);
+        }
+
+        .glow-blue-text {
+            text-shadow: 0 0 12px rgba(30, 62, 98, 0.8), 0 0 20px rgba(0, 230, 118, 0.3);
+        }
+
+        .glow-gold-btn {
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.4);
+        }
+
+        .glow-card {
+            box-shadow: 0 0 20px rgba(30, 62, 98, 0.3), inset 0 0 15px rgba(255, 215, 0, 0.05);
+        }
+
+        /* Light Mode Styling Overrides */
+        html.light body {
+            background-color: #F8FAFC !important;
+            color: #0F172A !important;
+        }
+
+        html.light .bg-navy-950,
+        html.light .bg-slate-950 {
+            background-color: #F1F5F9 !important;
+        }
+
+        html.light .bg-navy-900,
+        html.light .bg-slate-900 {
+            background-color: #FFFFFF !important;
+            border-color: #E2E8F0 !important;
+        }
+
+        html.light .text-white {
+            color: #0F172A !important;
+        }
     </style>
+
+    <!-- Theme Mode Toggle Initialization Script -->
+    <script>
+        // Check for stored preference or default to dark
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+        }
+
+        // Toggle function for button
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('light')) {
+                document.documentElement.classList.remove('light');
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
 
     <!-- External Custom Stylesheet -->
     <link rel="stylesheet" href="style.css">
@@ -127,28 +200,26 @@
     <!-- Main Content -->
     <main class="w-full max-w-full overflow-hidden px-3 sm:px-6 lg:px-8 space-y-8 box-border">
 
-      <!-- Hero Section -->
-<!-- Responsive Hero Section -->
-<section class="w-full max-w-full overflow-hidden px-3 sm:px-6 lg:px-8 py-8 sm:py-16 text-center space-y-6">
+   <!-- Hero Section with Glowing Blue, Gold, and Green Theme -->
+<section class="w-full max-w-full overflow-hidden px-3 sm:px-6 lg:px-8 py-10 sm:py-16 text-center space-y-6">
     
-    <!-- Bold & Scaled Headline Title -->
-    <h1 class="font-display font-black uppercase text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight sm:tracking-normal leading-tight text-white max-w-5xl mx-auto break-words">
-        SAFE INVESTMENT<br>
-        WITH <span class="text-neon-green drop-shadow-[0_0_15px_rgba(0,230,118,0.3)]">REAL GROWTH</span>
+    <!-- Glowing Headline Title -->
+    <h1 class="font-display font-black uppercase text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight text-white max-w-5xl mx-auto break-words">
+        <span class="text-brand-gold glow-gold-text">SAFE INVESTMENT</span><br>
+        WITH <span class="text-brand-green glow-green-text">REAL GROWTH</span>
     </h1>
 
     <!-- Subtitle Banner -->
-    <p class="font-mono text-xs sm:text-sm md:text-base text-emerald-400 font-semibold tracking-wider max-w-xl mx-auto uppercase">
+    <p class="font-mono text-xs sm:text-sm md:text-base text-sky-300 font-semibold tracking-wider max-w-xl mx-auto uppercase drop-shadow">
         Get Lifetime Income On Investment
     </p>
 
-    <!-- Main Call to Action Button (Points to register.html) -->
+    <!-- Main Call to Action Button (Gold Glow) -->
     <div class="pt-2">
-        <a href="/client/register.html" class="inline-block bg-neon-green hover:bg-emerald-400 text-slate-950 font-bold text-sm sm:text-base px-8 py-3.5 rounded-xl uppercase tracking-wider transition shadow-lg shadow-emerald-500/25 transform hover:-translate-y-0.5">
+        <a href="/client/register.html" class="inline-block bg-brand-gold hover:bg-brand-goldHover text-slate-950 font-extrabold text-sm sm:text-base px-8 py-3.5 rounded-xl uppercase tracking-wider transition glow-gold-btn transform hover:-translate-y-0.5">
             Open Deposit
         </a>
     </div>
-
 </section>
 
             <!-- Value Badges -->

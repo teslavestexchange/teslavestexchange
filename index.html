@@ -860,7 +860,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(simulateMarketFluctuations, 2500);
 
     // ==========================================
-// DYNAMIC AUTO-GENERATING EARNING POPUP ENGINE
+// DYNAMIC AUTO-GENERATING EARNING POPUP ENGINE (7s Loop)
 // ==========================================
 (function initEarningPopups() {
     // Dataset for random generation
@@ -909,7 +909,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!popup || !nameEl) return;
 
-        // Step 1: Slide down & fade out (300ms)
+        // Step 1: Slide down & fade out (400ms)
         popup.classList.add('translate-y-6', 'opacity-0');
 
         setTimeout(() => {
@@ -921,11 +921,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Step 3: Slide back up & fade in
             popup.classList.remove('translate-y-6', 'opacity-0');
-        }, 300);
+        }, 400);
     }
 
-    // Run interval every 3000ms (3 seconds)
-    setInterval(triggerNextPopup, 3000);
+    // Run interval every 7000ms (7 seconds)
+    setInterval(triggerNextPopup, 7000);
 })();
 </script>
 </body>

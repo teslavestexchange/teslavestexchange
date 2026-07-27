@@ -5,21 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Login | Teslavestexchange</title>
 
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS with Dark Mode & Custom Palette Support -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         navy: {
-                            950: '#0b0f17',
-                            900: '#121824',
-                            800: '#1a2332',
+                            950: '#030712', /* Deep Midnight Blue Body */
+                            900: '#0B192C', /* Deep Royal Navy Cards */
+                            800: '#1E3E62', /* Vibrant Blue Borders & Highlights */
                         },
-                        neon: {
-                            green: '#00E676'
+                        brand: {
+                            gold: '#FFD700',      /* Glowing Gold */
+                            goldHover: '#E6C200',
+                            green: '#00E676',     /* Neon Green */
+                            blue: '#1E3E62'       /* Accent Blue */
                         }
                     }
                 }
@@ -27,40 +30,134 @@
         }
     </script>
 
+    <!-- Custom Glowing Styles & Theme Overrides -->
+    <style>
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden !important;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        /* Neon Glow Effects */
+        .glow-gold-text {
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .glow-green-text {
+            text-shadow: 0 0 12px rgba(0, 230, 118, 0.7), 0 0 25px rgba(0, 230, 118, 0.4);
+        }
+
+        .glow-blue-text {
+            text-shadow: 0 0 12px rgba(30, 62, 98, 0.8), 0 0 20px rgba(0, 230, 118, 0.3);
+        }
+
+        .glow-gold-btn {
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.4);
+        }
+
+        .glow-card {
+            box-shadow: 0 0 25px rgba(30, 62, 98, 0.4), inset 0 0 15px rgba(255, 215, 0, 0.05);
+        }
+
+        /* Light Mode Styling Overrides */
+        html.light body {
+            background-color: #F8FAFC !important;
+            color: #0F172A !important;
+        }
+
+        html.light .bg-navy-950 {
+            background-color: #F1F5F9 !important;
+        }
+
+        html.light .bg-navy-900 {
+            background-color: #FFFFFF !important;
+            border-color: #E2E8F0 !important;
+        }
+
+        html.light .text-white {
+            color: #0F172A !important;
+        }
+    </style>
+
+    <!-- Theme Initialization Script -->
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('light')) {
+                document.documentElement.classList.remove('light');
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+
     <!-- External Custom Stylesheet -->
     <link rel="stylesheet" href="../style.css">
 </head>
-<body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col justify-between bg-grid-watermark ambient-green-glow">
+<body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+
+    <!-- Floating Background Currency Watermarks -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-15 select-none">
+        <span class="absolute top-[12%] left-[6%] text-6xl font-bold text-brand-gold glow-gold-text animate-pulse">$</span>
+        <span class="absolute top-[30%] right-[10%] text-7xl font-bold text-sky-400 glow-blue-text">€</span>
+        <span class="absolute top-[55%] left-[10%] text-8xl font-bold text-brand-green glow-green-text">£</span>
+        <span class="absolute top-[75%] right-[12%] text-6xl font-bold text-brand-gold glow-gold-text animate-pulse">₿</span>
+    </div>
 
     <!-- Top Navigation Header -->
-    <header class="border-b border-slate-800/80 bg-navy-900/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="/" class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-neon-gradient flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                    <span class="font-display font-extrabold text-slate-950 text-xl">T</span>
+    <header class="border-b border-navy-800/80 bg-navy-900/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-gold flex items-center justify-center shadow-lg shadow-amber-500/20 font-display font-extrabold text-slate-950 text-xl glow-gold-btn">
+                    T
                 </div>
                 <span class="font-display text-lg sm:text-xl font-extrabold tracking-wider text-white">
-                    TESLAVEST<span class="text-neon-green">EXCHANGE</span>
+                    TESLAVEST<span class="text-brand-green glow-green-text">EXCHANGE</span>
                 </span>
             </a>
 
-            <div class="text-xs font-mono text-slate-400">
-                Don't have an account? 
-                <a href="/client/register.html" class="text-neon-green font-bold hover:underline ml-1">Register</a>
+            <div class="flex items-center gap-3">
+                <!-- Light / Dark Mode Toggle Button -->
+                <button onclick="toggleTheme()" class="px-3 py-1.5 rounded-xl border border-brand-gold/40 bg-navy-900 text-brand-gold hover:bg-brand-gold hover:text-slate-950 font-mono text-xs font-bold transition flex items-center gap-1 glow-gold-btn">
+                    <span>☀️/🌙</span>
+                </button>
+
+                <div class="text-xs font-mono text-slate-400 hidden sm:block">
+                    Don't have an account? 
+                    <a href="register.html" class="text-brand-gold font-bold hover:underline ml-1 glow-gold-text">Register</a>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- Login Card Section -->
-    <main class="flex-grow flex items-center justify-center px-4 py-12">
-        <div class="card-grey w-full max-w-md p-8 sm:p-10 space-y-8 relative overflow-hidden border-emerald-500/30">
+    <main class="flex-grow flex items-center justify-center px-4 py-12 z-10">
+        <div class="bg-navy-900/90 border border-sky-900/60 w-full max-w-md p-8 sm:p-10 space-y-8 rounded-2xl glow-card backdrop-blur-md relative overflow-hidden">
             
+            <!-- Card Header -->
             <div class="text-center space-y-2">
-                <div class="inline-block bg-navy-950 border border-emerald-500/30 px-3 py-1 rounded-full text-[10px] font-mono text-neon-green">
-                    • ENCRYPTED SESSION TERMINAL
-                </div>
-                <h1 class="font-display text-3xl font-extrabold uppercase text-white">Welcome Back</h1>
-                <p class="text-xs text-slate-400">Access your trading dashboard and portfolio</p>
+                <h1 class="font-display text-3xl font-black uppercase text-brand-gold glow-gold-text tracking-wider">
+                    Welcome Back
+                </h1>
+                <p class="text-xs font-mono text-sky-300">Access your trading dashboard and portfolio</p>
             </div>
 
             <!-- Form -->
@@ -68,41 +165,41 @@
                 
                 <!-- Username or Email -->
                 <div class="space-y-1.5">
-                    <label class="block text-slate-300 uppercase font-bold">Username or Email</label>
+                    <label class="block text-slate-300 uppercase font-bold tracking-wider">Username or Email</label>
                     <input type="text" required placeholder="trader99" 
-                        class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
+                        class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-colors">
                 </div>
 
                 <!-- Password -->
                 <div class="space-y-1.5">
                     <div class="flex justify-between items-center">
-                        <label class="block text-slate-300 uppercase font-bold">Password</label>
-                        <a href="#" class="text-[10px] text-neon-green hover:underline">Forgot?</a>
+                        <label class="block text-slate-300 uppercase font-bold tracking-wider">Password</label>
+                        <a href="#" class="text-[10px] text-brand-green hover:underline glow-green-text">Forgot?</a>
                     </div>
                     <input type="password" required placeholder="••••••••••••" 
-                        class="w-full bg-navy-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-green transition-colors">
+                        class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-colors">
                 </div>
 
                 <!-- Remember Me -->
                 <div class="flex items-center space-x-2 pt-1">
-                    <input type="checkbox" id="remember" class="accent-emerald-500 rounded">
-                    <label for="remember" class="text-slate-400 text-[11px]">Remember login credentials</label>
+                    <input type="checkbox" id="remember" class="accent-amber-400 rounded cursor-pointer">
+                    <label for="remember" class="text-slate-400 text-[11px] cursor-pointer">Remember login credentials</label>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn-neon-green w-full py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider mt-4">
+                <button type="submit" class="w-full py-3.5 bg-brand-gold hover:bg-brand-goldHover text-slate-950 font-extrabold rounded-xl text-sm uppercase tracking-wider mt-4 transition glow-gold-btn transform hover:-translate-y-0.5">
                     Log In To Terminal
                 </button>
             </form>
 
             <div class="text-center pt-2">
-                <a href="/" class="text-slate-500 hover:text-slate-300 text-xs font-mono">← Back to Homepage</a>
+                <a href="../index.html" class="text-slate-400 hover:text-brand-gold text-xs font-mono transition">← Back to Homepage</a>
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-navy-950 py-4 text-center text-xs font-mono text-slate-500">
+    <footer class="border-t border-navy-800/80 bg-navy-950 py-4 text-center text-xs font-mono text-slate-500 z-10">
         © 2026 Teslavestexchange Engine. Encrypted Portal.
     </footer>
 

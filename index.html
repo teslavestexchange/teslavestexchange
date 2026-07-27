@@ -653,14 +653,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     </main>
 
-    <!-- Floating Live Earning Notification -->
-    <div id="earning-popup" class="fixed bottom-6 right-6 bg-navy-900 border border-emerald-500/40 p-4 rounded-xl shadow-2xl z-50 flex items-center space-x-3 live-popup">
-        <div class="text-3xl text-neon-green">₿</div>
-        <div class="text-xs font-mono">
-            <p class="text-white font-bold">Earning Notification</p>
-            <p class="text-slate-300"><span class="text-neon-green font-bold">Greyson</span> from SEYCHELLES has just earned <span class="text-neon-green font-bold">$3,989</span>.</p>
-        </div>
+   <!-- Floating Live Earning Notification -->
+<div id="earning-popup" class="fixed bottom-6 right-6 bg-navy-900 border border-brand-green/40 p-4 rounded-xl shadow-2xl z-50 flex items-center space-x-3 transition-all duration-500 transform translate-y-0 opacity-100 backdrop-blur-md glow-card">
+    <div id="popup-icon" class="text-3xl text-brand-green glow-green-text transition-transform duration-300">₿</div>
+    <div class="text-xs font-mono">
+        <p class="text-slate-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-brand-green animate-ping"></span> Live Payout
+        </p>
+        <p class="text-slate-200 mt-0.5">
+            <span id="popup-name" class="text-brand-gold font-bold glow-gold-text">Greyson</span> 
+            from <span id="popup-country" class="text-white font-semibold">SEYCHELLES</span> 
+            earned <span id="popup-amount" class="text-brand-green font-bold glow-green-text">$3,989</span>
+        </p>
     </div>
+</div>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-navy-950 py-10 text-slate-400 text-xs font-mono mt-12">
@@ -852,6 +858,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Run simulation loop every 2.5 seconds
     setInterval(simulateMarketFluctuations, 2500);
+
+    // ==========================================
+// DYNAMIC AUTO-GENERATING EARNING POPUP ENGINE
+// ==========================================
+(function initEarningPopups() {
+    // Dataset for random generation
+    const firstNames = [
+        'Greyson', 'Mateo', 'Amina', 'Sorensen', 'Chen', 'Elena', 'Kowalski', 
+        'Liam', 'Fatima', 'Dimitri', 'Sven', 'Tariq', 'Isabella', 'Yuki', 
+        'Kwame', 'Zoe', 'Lucas', 'Nour', 'Viktor', 'Freja', 'Carlos'
+    ];
+
+    const countries = [
+        'SEYCHELLES', 'SWITZERLAND', 'UNITED KINGDOM', 'SINGAPORE', 'NIGERIA', 
+        'UNITED STATES', 'GERMANY', 'UNITED ARAB EMIRATES', 'JAPAN', 'CANADA', 
+        'NORWAY', 'BRAZIL', 'AUSTRALIA', 'SOUTH AFRICA', 'NETHERLANDS', 'FINLAND'
+    ];
+
+    const icons = ['₿', '$', '€', '🚀', '💎'];
+
+    // Track recently used names/countries to avoid repetitive back-to-back notifications
+    let usedNames = [];
+    let usedCountries = [];
+
+    function getRandomItem(arr, recentTracker, maxHistory = 5) {
+        let available = arr.filter(item => !recentTracker.includes(item));
+        if (available.length === 0) available = arr;
+        
+        const selected = available[Math.floor(Math.random() * available.length)];
+        
+        recentTracker.push(selected);
+        if (recentTracker.length > maxHistory) recentTracker.shift();
+        
+        return selected;
+    }
+
+    function generateRandomEarning() {
+        // Random amount between $120 and $14,500
+        const rawAmount = Math.floor(Math.random() * (14500 - 120 + 1)) + 120;
+        return '$' + rawAmount.toLocaleString('en-US');
+    }
+
+    function triggerNextPopup() {
+        const popup = document.getElementById('earning-popup');
+        const nameEl = document.getElementById('popup-name');
+        const countryEl = document.getElementById('popup-country');
+        const amountEl = document.getElementById('popup-amount');
+        const iconEl = document.getElementById('popup-icon');
+
+        if (!popup || !nameEl) return;
+
+        // Step 1: Slide down & fade out (300ms)
+        popup.classList.add('translate-y-6', 'opacity-0');
+
+        setTimeout(() => {
+            // Step 2: Swap values while hidden
+            nameEl.innerText = getRandomItem(firstNames, usedNames);
+            countryEl.innerText = getRandomItem(countries, usedCountries);
+            amountEl.innerText = generateRandomEarning();
+            iconEl.innerText = icons[Math.floor(Math.random() * icons.length)];
+
+            // Step 3: Slide back up & fade in
+            popup.classList.remove('translate-y-6', 'opacity-0');
+        }, 300);
+    }
+
+    // Run interval every 3000ms (3 seconds)
+    setInterval(triggerNextPopup, 3000);
+})();
 </script>
 </body>
 </html>

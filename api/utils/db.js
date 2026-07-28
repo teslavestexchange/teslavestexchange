@@ -1,16 +1,41 @@
-const { Pool } = require('pg');
+// api/utils/db.js
+const mongoose = require('mongoose');
 
-// This configures the connection pool using a system environment variable.
-// Vercel will securely store your actual database password so it's never written raw in the code.
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    // Required for secure cloud-hosted databases like Supabase or Neon
-    rejectUnauthorized: false 
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+  throw new Error('Please define the MONGODB_URI environment variable inside .env');
+}
+
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+async function connectToDatabase() {
+  if (cached.conn) {
+    return cached.conn;
   }
-});
 
-module.exports = {
-  // This helper function allows other backend files to run queries easily
-  query: (text, params) => pool.query(text, params),
-};
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+    };
+
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      return mongoose;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+
+  return cached.conn;
+}
+
+module.exports = connectToDatabase;

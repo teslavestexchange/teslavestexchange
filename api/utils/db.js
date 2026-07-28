@@ -1,12 +1,6 @@
 // api/utils/db.js
 const mongoose = require('mongoose');
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env');
-}
-
 let cached = global.mongoose;
 
 if (!cached) {
@@ -22,6 +16,12 @@ async function connectToDatabase() {
     const opts = {
       bufferCommands: false,
     };
+
+    const MONGODB_URI = process.env.MONGODB_URI;
+
+    if (!MONGODB_URI) {
+      throw new Error('Please define the MONGODB_URI environment variable inside Vercel');
+    }
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose;

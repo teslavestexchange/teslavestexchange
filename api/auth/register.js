@@ -1,13 +1,13 @@
 // api/auth/register.js
 const connectToDatabase = require('../utils/db');
-const User = require('../../models/User');
+const User = require('../../models/user'); // Matches your models/user.js file
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'teslavest_secret_key_2026';
 
 module.exports = async function handler(req, res) {
-  // Always set response content type to JSON
+  // Return standard JSON response
   res.setHeader('Content-Type', 'application/json');
 
   if (req.method !== 'POST') {
@@ -15,44 +15,41 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // 1. Establish database connection
+    // 1. Connect to MongoDB Atlas
     await connectToDatabase();
 
     const { fullname, username, email, password } = req.body || {};
 
-    // 2. Validate input fields
     if (!fullname || !username || !email || !password) {
       return res.status(400).json({ error: 'All fields are required.' });
     }
 
-    // 3. Check for existing user (case-insensitive for email)
-    const normalizedEmail = email.toLowerCase().trim();
+    // 2. Check for duplicate user
     const existingUser = await User.findOne({
-      $or: [{ email: normalizedEmail }, { username: username.trim() }]
+      $or: [{ email: email.toLowerCase().trim() }, { username: username.trim() }]
     });
 
     if (existingUser) {
       return res.status(400).json({ error: 'Username or Email is already registered.' });
     }
 
-    // 4. Hash user password securely
+    // 3. Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 5. Create new user record
+    // 4. Save new user
     const newUser = new User({
       fullname: fullname.trim(),
       username: username.trim(),
-      email: normalizedEmail,
+      email: email.toLowerCase().trim(),
       password: hashedPassword
     });
 
     await newUser.save();
 
-    // 6. Sign JWT token
+    // 5. Generate JWT token
     const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '7d' });
 
-    // 7. Return success response
     return res.status(201).json({
       message: 'Account created successfully',
       token,
@@ -67,13 +64,7 @@ module.exports = async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('Registration API Error:', error);
-
-    // If Mongoose duplicate key error occurs
-    if (error.code === 11000) {
-      return res.status(400).json({ error: 'Username or Email is already in use.' });
-    }
-
-    return res.status(500).json({ error: error.message || 'Internal server error during registration.' });
+    console.error('Registration Error:', error);
+    return res.status(500).json({ error: error.message || 'Database connection failure.' });
   }
 };

@@ -219,14 +219,14 @@
         © 2026 Teslavestexchange Engine. Encrypted Portal.
     </footer>
 
-    <!-- Registration Handler Script -->
+   <!-- Registration Handler Script -->
     <script>
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
-            submitBtn.innerText = "Sending Verification Email...";
+            submitBtn.innerText = "CREATING ACCOUNT...";
 
             const payload = {
                 fullname: document.getElementById('fullname').value,
@@ -245,50 +245,23 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Save state and token returned from server for verify.html logic
-                    localStorage.setItem('pendingUserId', data.userId);
-                    localStorage.setItem('simulatedOtp', data.otpCode);
-                    localStorage.setItem('currentUser', JSON.stringify(payload));
+                    // Save JWT token & user object to browser local storage
+                    localStorage.setItem('teslavest_token', data.token);
+                    localStorage.setItem('teslavest_user', JSON.stringify(data.user));
 
-                    window.location.href = 'verify.html';
+                    // Redirect directly to user dashboard
+                    window.location.href = 'dashboard.html';
                 } else {
-                    throw new Error(data.error || 'Failed to process registration');
+                    alert(data.error || 'Registration failed.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Complete Registration";
                 }
             } catch (err) {
-                alert('Registration error: ' + err.message);
+                alert('Connection error: ' + err.message);
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Complete Registration";
             }
         });
-
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const fullname = document.getElementById('fullname').value;
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    try {
-        const res = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fullname, username, email, password })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-            localStorage.setItem('teslavest_token', data.token);
-            localStorage.setItem('teslavest_user', JSON.stringify(data.user));
-            window.location.href = 'dashboard.html';
-        } else {
-            alert(data.error || 'Registration failed.');
-        }
-    } catch (err) {
-        alert('Server connectivity error. Please try again.');
-    }
-});
     </script>
 </body>
 </html>

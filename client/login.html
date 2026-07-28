@@ -86,56 +86,6 @@
         }
     </style>
 
-    <!-- Theme Initialization Script -->
-    <script>
-        if (localStorage.getItem('theme') === 'light') {
-            document.documentElement.classList.add('light');
-            document.documentElement.classList.remove('dark');
-        } else {
-            document.documentElement.classList.add('dark');
-            document.documentElement.classList.remove('light');
-        }
-
-        function toggleTheme() {
-            if (document.documentElement.classList.contains('light')) {
-                document.documentElement.classList.remove('light');
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-                document.documentElement.classList.add('light');
-                localStorage.setItem('theme', 'light');
-            }
-        }
-
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    try {
-        const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-            localStorage.setItem('teslavest_token', data.token);
-            localStorage.setItem('teslavest_user', JSON.stringify(data.user));
-            window.location.href = 'dashboard.html';
-        } else {
-            alert(data.error || 'Login failed.');
-        }
-    } catch (err) {
-        alert('Server connectivity error. Please try again.');
-    }
-});
-    </script>
-
     <!-- External Custom Stylesheet -->
     <link rel="stylesheet" href="../style.css">
 </head>
@@ -162,7 +112,6 @@
             </a>
 
             <div class="flex items-center gap-3">
-                <!-- Light / Dark Mode Toggle Button -->
                 <button onclick="toggleTheme()" class="px-3 py-1.5 rounded-xl border border-brand-gold/40 bg-navy-900 text-brand-gold hover:bg-brand-gold hover:text-slate-950 font-mono text-xs font-bold transition flex items-center gap-1 glow-gold-btn">
                     <span>☀️/🌙</span>
                 </button>
@@ -187,13 +136,13 @@
                 <p class="text-xs font-mono text-sky-300">Access your trading dashboard and portfolio</p>
             </div>
 
-            <!-- Form -->
-            <form action="#" method="POST" class="space-y-5 font-mono text-xs">
+            <!-- Form (Removed action and method to prevent standard HTML POST redirect) -->
+            <form id="loginForm" class="space-y-5 font-mono text-xs">
                 
                 <!-- Username or Email -->
                 <div class="space-y-1.5">
                     <label class="block text-slate-300 uppercase font-bold tracking-wider">Username or Email</label>
-                    <input type="text" required placeholder="trader99" 
+                    <input type="text" id="email" required placeholder="trader99 or user@example.com" 
                         class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-colors">
                 </div>
 
@@ -203,7 +152,7 @@
                         <label class="block text-slate-300 uppercase font-bold tracking-wider">Password</label>
                         <a href="#" class="text-[10px] text-brand-green hover:underline glow-green-text">Forgot?</a>
                     </div>
-                    <input type="password" required placeholder="••••••••••••" 
+                    <input type="password" id="password" required placeholder="••••••••••••" 
                         class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-colors">
                 </div>
 
@@ -214,7 +163,7 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="w-full py-3.5 bg-brand-gold hover:bg-brand-goldHover text-slate-950 font-extrabold rounded-xl text-sm uppercase tracking-wider mt-4 transition glow-gold-btn transform hover:-translate-y-0.5">
+                <button type="submit" id="submitBtn" class="w-full py-3.5 bg-brand-gold hover:bg-brand-goldHover text-slate-950 font-extrabold rounded-xl text-sm uppercase tracking-wider mt-4 transition glow-gold-btn transform hover:-translate-y-0.5">
                     Log In To Terminal
                 </button>
             </form>
@@ -229,6 +178,66 @@
     <footer class="border-t border-navy-800/80 bg-navy-950 py-4 text-center text-xs font-mono text-slate-500 z-10">
         © 2026 Teslavestexchange Engine. Encrypted Portal.
     </footer>
+
+    <!-- Scripts placed at the end so DOM elements are available -->
+    <script>
+        // Theme initialization
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('light')) {
+                document.documentElement.classList.remove('light');
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Handle Login Submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "AUTHENTICATING...";
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('teslavest_token', data.token);
+                    localStorage.setItem('teslavest_user', JSON.stringify(data.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert(data.error || 'Login failed.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "LOG IN TO TERMINAL";
+                }
+            } catch (err) {
+                alert('Server connectivity error. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerText = "LOG IN TO TERMINAL";
+            }
+        });
+    </script>
 
 </body>
 </html>

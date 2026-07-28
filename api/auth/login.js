@@ -16,17 +16,26 @@ module.exports = async function handler(req, res) {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'Email and Password are required.' });
+      return res.status(400).json({ error: 'Username/Email and Password are required.' });
     }
 
-    const user = await User.findOne({ email });
+    const inputIdentifier = email.trim().toLowerCase();
+
+    // Find user matching either email OR username
+    const user = await User.findOne({
+      $or: [
+        { email: inputIdentifier },
+        { username: email.trim() }
+      ]
+    });
+
     if (!user) {
-      return res.status(400).json({ error: 'Invalid email or password credentials.' });
+      return res.status(400).json({ error: 'Invalid email/username or password.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid email or password credentials.' });
+      return res.status(400).json({ error: 'Invalid email/username or password.' });
     }
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
@@ -39,8 +48,8 @@ module.exports = async function handler(req, res) {
         fullname: user.fullname,
         username: user.username,
         email: user.email,
-        balanceUSD: user.balanceUSD,
-        frozenUSD: user.frozenUSD
+        balanceUSD: user.balanceUSD || 0,
+        frozenUSD: user.frozenUSD || 0
       }
     });
   } catch (error) {

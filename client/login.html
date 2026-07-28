@@ -136,7 +136,7 @@
                 <p class="text-xs font-mono text-sky-300">Access your trading dashboard and portfolio</p>
             </div>
 
-            <!-- Form (Removed action and method to prevent standard HTML POST redirect) -->
+            <!-- Form -->
             <form id="loginForm" class="space-y-5 font-mono text-xs">
                 
                 <!-- Username or Email -->
@@ -179,7 +179,7 @@
         © 2026 Teslavestexchange Engine. Encrypted Portal.
     </footer>
 
-    <!-- Scripts placed at the end so DOM elements are available -->
+    <!-- Logic Script at bottom of DOM body -->
     <script>
         // Theme initialization
         if (localStorage.getItem('theme') === 'light') {
@@ -202,7 +202,7 @@
             }
         }
 
-        // Handle Login Submission
+        // Handle Login Submission via AJAX/Fetch
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -220,7 +220,15 @@
                     body: JSON.stringify({ email, password })
                 });
 
-                const data = await res.json();
+                const contentType = res.headers.get("content-type");
+                let data = {};
+
+                if (contentType && contentType.includes("application/json")) {
+                    data = await res.json();
+                } else {
+                    const textError = await res.text();
+                    throw new Error(textError.substring(0, 100) || "Invalid server response.");
+                }
 
                 if (res.ok) {
                     localStorage.setItem('teslavest_token', data.token);
@@ -232,7 +240,7 @@
                     submitBtn.innerText = "LOG IN TO TERMINAL";
                 }
             } catch (err) {
-                alert('Server connectivity error. Please try again.');
+                alert('Connection/Server Error: ' + err.message);
                 submitBtn.disabled = false;
                 submitBtn.innerText = "LOG IN TO TERMINAL";
             }

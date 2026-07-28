@@ -1,19 +1,22 @@
 // api/auth/login.js
 const connectToDatabase = require('../utils/db');
-const User = require('../../models/User');
+const User = require('../../models/user'); // MUST BE LOWERCASE 'user' TO MATCH YOUR FILE TREE
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'teslavest_secret_key_2026';
 
 module.exports = async function handler(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
     await connectToDatabase();
-    const { email, password } = req.body;
+    
+    const { email, password } = req.body || {};
 
     if (!email || !password) {
       return res.status(400).json({ error: 'Username/Email and Password are required.' });
@@ -21,7 +24,7 @@ module.exports = async function handler(req, res) {
 
     const inputIdentifier = email.trim().toLowerCase();
 
-    // Find user matching either email OR username
+    // Search user by email or username
     const user = await User.findOne({
       $or: [
         { email: inputIdentifier },
@@ -30,12 +33,12 @@ module.exports = async function handler(req, res) {
     });
 
     if (!user) {
-      return res.status(400).json({ error: 'Invalid email/username or password.' });
+      return res.status(400).json({ error: 'Invalid username/email or password.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid email/username or password.' });
+      return res.status(400).json({ error: 'Invalid username/email or password.' });
     }
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
@@ -52,8 +55,9 @@ module.exports = async function handler(req, res) {
         frozenUSD: user.frozenUSD || 0
       }
     });
+
   } catch (error) {
-    console.error('Login Error:', error);
-    return res.status(500).json({ error: 'Internal server error during authentication.' });
+    console.error('Login Route Error:', error);
+    return res.status(500).json({ error: error.message || 'Internal server error.' });
   }
 };

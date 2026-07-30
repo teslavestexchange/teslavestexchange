@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fund Account | Teslavestexchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 950: '#030712', 900: '#0B192C', 800: '#1E3E62' },
+                        brand: { gold: '#FFD700', goldHover: '#E6C200', green: '#00E676' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glow-gold-text { text-shadow: 0 0 12px rgba(255, 215, 0, 0.7); }
+        .glow-card { box-shadow: 0 0 25px rgba(30, 62, 98, 0.3); }
+        .glow-gold-btn { box-shadow: 0 0 18px rgba(255, 215, 0, 0.3); }
+    </style>
+</head>
+<body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col justify-between font-mono text-xs">
+
+    <!-- Header -->
+    <header class="border-b border-navy-800 bg-navy-900/90 p-4 sticky top-0 z-50 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <a href="dashboard.html" class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center font-extrabold text-slate-950">T</div>
+            <span class="font-extrabold text-white text-base">TESLAVEST<span class="text-brand-green">EXCHANGE</span></span>
+        </a>
+        <a href="dashboard.html" class="px-3 py-1.5 rounded-xl border border-navy-800 text-slate-300 hover:text-brand-gold">← Back to Dashboard</a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-2xl w-full mx-auto px-4 py-8 space-y-6">
+        <div class="bg-navy-900 border border-navy-800 p-6 sm:p-8 rounded-2xl glow-card space-y-6">
+            <div>
+                <h1 class="text-2xl font-black text-brand-gold glow-gold-text uppercase">Fund Your Account</h1>
+                <p class="text-slate-400 text-[11px] mt-1">Select payment asset and send funds to the address below.</p>
+            </div>
+
+            <form id="depositForm" class="space-y-4">
+                <!-- Select Asset -->
+                <div class="space-y-1">
+                    <label class="text-slate-300 uppercase font-bold">Select Payment Asset</label>
+                    <select id="asset" class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold" onchange="updateWalletAddress()">
+                        <option value="USDT_TRC20">USDT (TRC20)</option>
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ERC20)</option>
+                    </select>
+                </div>
+
+                <!-- Deposit Amount -->
+                <div class="space-y-1">
+                    <label class="text-slate-300 uppercase font-bold">Deposit Amount ($USD)</label>
+                    <input type="number" id="amount" min="10" required placeholder="e.g. 500" class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold">
+                </div>
+
+                <!-- Wallet Address Card -->
+                <div class="bg-navy-950 border border-navy-800 p-4 rounded-xl space-y-2">
+                    <span class="text-slate-400 text-[10px] uppercase font-bold">Deposit Address</span>
+                    <div class="flex items-center justify-between gap-2">
+                        <input type="text" id="walletAddress" readonly value="T9x2y...USDT_TRC20_WALLET" class="bg-transparent text-brand-gold font-bold w-full focus:outline-none text-xs">
+                        <button type="button" onclick="copyAddress()" class="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-brand-gold hover:text-slate-950 font-bold transition">Copy</button>
+                    </div>
+                </div>
+
+                <!-- Submit Request -->
+                <button type="submit" id="submitBtn" class="w-full py-3.5 bg-brand-gold hover:bg-brand-goldHover text-slate-950 font-black rounded-xl uppercase tracking-wider glow-gold-btn">
+                    Submit Deposit Notification
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="border-t border-navy-800 bg-navy-950 py-4 text-center text-slate-500">
+        © 2026 Teslavestexchange Engine. Encrypted Portal.
+    </footer>
+
+    <script>
+        const wallets = {
+            USDT_TRC20: "TX7N289aLm3pQ8R9vX21908KzA91238912",
+            BTC: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+            ETH: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+        };
+
+        function updateWalletAddress() {
+            const selected = document.getElementById('asset').value;
+            document.getElementById('walletAddress').value = wallets[selected] || wallets.USDT_TRC20;
+        }
+
+        function copyAddress() {
+            const addr = document.getElementById('walletAddress');
+            navigator.clipboard.writeText(addr.value);
+            alert('Address copied to clipboard!');
+        }
+
+        document.getElementById('depositForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "PROCESSING...";
+
+            const amount = document.getElementById('amount').value;
+            const asset = document.getElementById('asset').value;
+            const user = JSON.parse(localStorage.getItem('teslavest_user') || '{}');
+
+            try {
+                const res = await fetch('/api/transactions/deposit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: user.id, amount, asset })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alert('Deposit notification submitted! Awaiting network confirmation.');
+                    window.location.href = 'transactions.html';
+                } else {
+                    alert(data.error || 'Deposit submission failed.');
+                }
+            } catch (err) {
+                alert('Server connectivity error.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "SUBMIT DEPOSIT NOTIFICATION";
+            }
+        });
+
+        updateWalletAddress();
+    </script>
+</body>
+</html>

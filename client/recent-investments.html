@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent Investments | Teslavestexchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 950: '#030712', 900: '#0B192C', 800: '#1E3E62' },
+                        brand: { gold: '#FFD700', goldHover: '#E6C200', green: '#00E676' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glow-gold-text { text-shadow: 0 0 12px rgba(255, 215, 0, 0.7); }
+        .glow-card { box-shadow: 0 0 25px rgba(30, 62, 98, 0.3); }
+    </style>
+</head>
+<body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col justify-between font-mono text-xs">
+
+    <header class="border-b border-navy-800 bg-navy-900/90 p-4 sticky top-0 z-50 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <a href="dashboard.html" class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center font-extrabold text-slate-950">T</div>
+            <span class="font-extrabold text-white text-base">TESLAVEST<span class="text-brand-green">EXCHANGE</span></span>
+        </a>
+        <a href="dashboard.html" class="px-3 py-1.5 rounded-xl border border-navy-800 text-slate-300 hover:text-brand-gold">← Back to Dashboard</a>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 space-y-6">
+        <div>
+            <h1 class="text-2xl font-black text-brand-gold glow-gold-text uppercase">Active & Past Investments</h1>
+            <p class="text-slate-400 text-[11px] mt-1">Real-time monitoring of your active positions and historic yield runs.</p>
+        </div>
+
+        <div class="bg-navy-900 border border-navy-800 rounded-2xl glow-card overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-navy-800 bg-navy-950/50 text-slate-400 uppercase text-[10px]">
+                            <th class="p-4">Plan Name</th>
+                            <th class="p-4">Amount</th>
+                            <th class="p-4">Daily ROI</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4">Started Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="investmentsTableBody" class="divide-y divide-navy-800/50">
+                        <tr>
+                            <td colspan="5" class="p-6 text-center text-slate-500">Loading active portfolios...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-navy-800 bg-navy-950 py-4 text-center text-slate-500">
+        © 2026 Teslavestexchange Engine. Encrypted Portal.
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = JSON.parse(localStorage.getItem('teslavest_user') || '{}');
+            const tbody = document.getElementById('investmentsTableBody');
+
+            try {
+                const res = await fetch(`/api/investments/list?userId=${user.id}`);
+                const data = await res.json();
+
+                if (res.ok && data.investments && data.investments.length > 0) {
+                    tbody.innerHTML = data.investments.map(inv => `
+                        <tr class="hover:bg-navy-800/30 transition">
+                            <td class="p-4 font-bold text-white">${inv.planName}</td>
+                            <td class="p-4 text-brand-gold">$${Number(inv.amount).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                            <td class="p-4 text-brand-green">${inv.roi}% / day</td>
+                            <td class="p-4"><span class="px-2 py-1 rounded bg-emerald-500/10 text-brand-green font-bold uppercase text-[9px]">${inv.status}</span></td>
+                            <td class="p-4 text-slate-400">${new Date(inv.createdAt).toLocaleDateString()}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">No investment records found. <a href="buy-plan.html" class="text-brand-gold font-bold hover:underline">Buy a plan now</a>.</td></tr>`;
+                }
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">No active investment positions logged yet.</td></tr>`;
+            }
+        });
+    </script>
+</body>
+</html>

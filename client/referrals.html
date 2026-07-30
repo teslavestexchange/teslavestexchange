@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refer Users | Teslavestexchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 950: '#030712', 900: '#0B192C', 800: '#1E3E62' },
+                        brand: { gold: '#FFD700', goldHover: '#E6C200', green: '#00E676' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glow-gold-text { text-shadow: 0 0 12px rgba(255, 215, 0, 0.7); }
+        .glow-card { box-shadow: 0 0 25px rgba(30, 62, 98, 0.3); }
+        .glow-gold-btn { box-shadow: 0 0 18px rgba(255, 215, 0, 0.3); }
+    </style>
+</head>
+<body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col justify-between font-mono text-xs">
+
+    <!-- Header -->
+    <header class="border-b border-navy-800 bg-navy-900/90 p-4 sticky top-0 z-50 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <a href="dashboard.html" class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center font-extrabold text-slate-950">T</div>
+            <span class="font-extrabold text-white text-base">TESLAVEST<span class="text-brand-green">EXCHANGE</span></span>
+        </a>
+        <a href="dashboard.html" class="px-3 py-1.5 rounded-xl border border-navy-800 text-slate-300 hover:text-brand-gold">← Back to Dashboard</a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-2xl w-full mx-auto px-4 py-8 space-y-6">
+        <div class="bg-navy-900 border border-navy-800 p-6 sm:p-8 rounded-2xl glow-card space-y-6">
+            <div>
+                <h1 class="text-2xl font-black text-brand-gold glow-gold-text uppercase">Referral Program</h1>
+                <p class="text-slate-400 text-[11px] mt-1">Invite partners to Teslavestexchange and earn a 10% commission on every initial capital contribution.</p>
+            </div>
+
+            <!-- Referral Link Input Container -->
+            <div class="space-y-2">
+                <label class="text-slate-300 uppercase font-bold">Your Unique Referral Link</label>
+                <div class="flex items-center gap-2 bg-navy-950 border border-navy-800 p-2.5 rounded-xl">
+                    <input type="text" id="referralLink" readonly class="bg-transparent text-white font-bold w-full focus:outline-none text-xs">
+                    <button onclick="copyRefLink()" class="px-4 py-2 rounded-lg bg-brand-gold hover:bg-brand-goldHover text-slate-950 font-black transition glow-gold-btn">
+                        COPY
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Box -->
+            <div class="grid grid-cols-2 gap-4 pt-2">
+                <div class="bg-navy-950 border border-navy-800 p-4 rounded-xl text-center space-y-1">
+                    <span class="text-slate-400 uppercase text-[10px] font-bold">Total Referrals</span>
+                    <div id="refCount" class="text-2xl font-black text-white">0</div>
+                </div>
+                <div class="bg-navy-950 border border-navy-800 p-4 rounded-xl text-center space-y-1">
+                    <span class="text-slate-400 uppercase text-[10px] font-bold">Commission Earned</span>
+                    <div id="refBonus" class="text-2xl font-black text-brand-green">$0.00</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-navy-800 bg-navy-950 py-4 text-center text-slate-500">
+        © 2026 Teslavestexchange Engine. Encrypted Portal.
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('teslavest_user') || '{}');
+            const username = user.username || 'trader';
+            const refUrl = `${window.location.origin}/client/register.html?ref=${username}`;
+            
+            document.getElementById('referralLink').value = refUrl;
+            document.getElementById('refBonus').innerText = `$${Number(user.totalReferralBonus || 0).toFixed(2)}`;
+        });
+
+        function copyRefLink() {
+            const linkInput = document.getElementById('referralLink');
+            navigator.clipboard.writeText(linkInput.value);
+            alert('Referral link copied to clipboard!');
+        }
+    </script>
+</body>
+</html>

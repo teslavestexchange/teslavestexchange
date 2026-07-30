@@ -1,38 +1,24 @@
+const connectToDatabase = require('../utils/db');
+const User = require('../../models/user');
+
+const ADMIN_PASSKEY = process.env.ADMIN_PASSKEY || 'Healing1'; 
+
 module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   try {
-    // 1. Safely import modules supporting both ES Modules (export default) and CommonJS (module.exports)
-    let connectToDatabase, User;
-    try {
-      const dbModule = require('../utils/db');
-      connectToDatabase = dbModule.default || dbModule;
-
-      const userModule = require('../../models/user');
-      User = userModule.default || userModule;
-    } catch (importErr) {
-      console.error('Import Path Error:', importErr);
-      return res.status(500).json({ error: `Server import error: ${importErr.message}` });
-    }
-
-    // 2. Authenticate Admin Passkey
-    const ADMIN_PASSKEY = process.env.ADMIN_PASSKEY || 'Healing1';
     const authHeader = req.headers['x-admin-key'];
-
     if (!authHeader || authHeader !== ADMIN_PASSKEY) {
       return res.status(401).json({ error: 'Unauthorized: Invalid Admin Passkey.' });
     }
 
-    // Connect to database
     await connectToDatabase();
 
-    // 3. GET: List all users
     if (req.method === 'GET') {
       const users = await User.find({}).select('-password').sort({ createdAt: -1 });
       return res.status(200).json({ users });
     }
 
-    // 4. PUT: Update user records
     if (req.method === 'PUT') {
       const { userId, balanceUSD, totalProfit, totalBonus, totalDeposit, totalWithdrawals } = req.body;
 
@@ -65,6 +51,6 @@ module.exports = async function handler(req, res) {
 
   } catch (error) {
     console.error('Admin API Error:', error);
-    return res.status(500).json({ error: error.message || 'Internal Server Error' });
+    return res.status(500).json({ error: error.message || 'Internal server error.' });
   }
 };

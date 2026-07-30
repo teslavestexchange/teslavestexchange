@@ -1,4 +1,3 @@
-// models/User.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -6,15 +5,13 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email:    { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  balanceUSD: { type: Number, default: 0.0000 },
-  frozenUSD:  { type: Number, default: 0.0000 },
-  createdAt:  { type: Date, default: Date.now }
+  balanceUSD:       { type: Number, default: 0 },
+  frozenUSD:        { type: Number, default: 0 },
+  totalProfit:      { type: Number, default: 0 },
+  totalBonus:       { type: Number, default: 0 },
+  totalDeposit:     { type: Number, default: 0 },
+  totalWithdrawals: { type: Number, default: 0 },
+  createdAt:        { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.models.User || mongoose.model('User', userSchema);
-// Inside models/user.js schema definition:
-balanceUSD: { type: Number, default: 0 },
-totalProfit: { type: Number, default: 0 },
-totalBonus: { type: Number, default: 0 },
-totalDeposit: { type: Number, default: 0 },
-totalWithdrawals: { type: Number, default: 0 },

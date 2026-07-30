@@ -7,6 +7,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   try {
+    // 1. Authenticate Admin Passkey
     const authHeader = req.headers['x-admin-key'];
     if (!authHeader || authHeader !== ADMIN_PASSKEY) {
       return res.status(401).json({ error: 'Unauthorized: Invalid Admin Passkey.' });
@@ -14,11 +15,13 @@ module.exports = async function handler(req, res) {
 
     await connectToDatabase();
 
+    // 2. GET: List all users
     if (req.method === 'GET') {
       const users = await User.find({}).select('-password').sort({ createdAt: -1 });
       return res.status(200).json({ users });
     }
 
+    // 3. PUT: Update user records manually
     if (req.method === 'PUT') {
       const { userId, balanceUSD, totalProfit, totalBonus, totalDeposit, totalWithdrawals } = req.body;
 

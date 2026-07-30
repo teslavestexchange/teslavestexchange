@@ -428,6 +428,41 @@
             } catch (err) {
                 console.error("Error parsing user data", err);
             }
+            <script>
+    async function loadDashboardData() {
+        const userId = localStorage.getItem('userId') || sessionStorage.getItem('userId');
+        
+        if (!userId) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/auth/me', {
+                headers: { 'x-user-id': userId }
+            });
+            const data = await res.json();
+
+            if (res.ok && data.user) {
+                const u = data.user;
+
+                // Format numbers to currency strings
+                const fmt = num => `$${Number(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+                // Map database values directly to HTML DOM elements
+                if (document.getElementById('userBalance')) document.getElementById('userBalance').innerText = fmt(u.balanceUSD);
+                if (document.getElementById('totalProfit')) document.getElementById('totalProfit').innerText = fmt(u.totalProfit);
+                if (document.getElementById('totalBonus')) document.getElementById('totalBonus').innerText = fmt(u.totalBonus);
+                if (document.getElementById('totalDeposit')) document.getElementById('totalDeposit').innerText = fmt(u.totalDeposit);
+                if (document.getElementById('totalWithdrawals')) document.getElementById('totalWithdrawals').innerText = fmt(u.totalWithdrawals);
+            }
+        } catch (err) {
+            console.error('Failed to update dashboard fields:', err);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDashboardData);
+</script>
         });
     </script>
 </body>

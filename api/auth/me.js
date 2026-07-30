@@ -27,6 +27,9 @@ module.exports = async function handler(req, res) {
         balanceUSD: user.balanceUSD || 0,
         totalProfit: user.totalProfit || 0,
         totalBonus: user.totalBonus || 0,
+        totalReferralBonus: user.totalReferralBonus || 0,
+        totalInvestmentPlans: user.totalInvestmentPlans || 0,
+        activeInvestmentPlans: user.activeInvestmentPlans || 0,
         totalDeposit: user.totalDeposit || 0,
         totalWithdrawals: user.totalWithdrawals || 0,
       }

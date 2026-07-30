@@ -391,79 +391,70 @@
 
         // Logout User
         function logoutUser() {
-            localStorage.removeItem('teslavest_token');
+            localStorage.removeItem('userId');
             localStorage.removeItem('teslavest_user');
+            localStorage.removeItem('teslavest_token');
             window.location.href = 'login.html';
         }
 
-        // Load Dynamic User Data
-        document.addEventListener('DOMContentLoaded', () => {
-            const rawUser = localStorage.getItem('teslavest_user');
-            const token = localStorage.getItem('teslavest_token');
+        // Load Dynamic User Data from Server
+        async function loadDashboardData() {
+            // Check all possible userId storage keys
+            let userId = localStorage.getItem('userId') || sessionStorage.getItem('userId');
+            
+            if (!userId) {
+                const rawUser = localStorage.getItem('teslavest_user');
+                if (rawUser) {
+                    try {
+                        const parsed = JSON.parse(rawUser);
+                        userId = parsed._id || parsed.id;
+                    } catch(e) {}
+                }
+            }
 
-            if (!rawUser || !token) {
-                // If not logged in, redirect to login page
+            if (!userId) {
                 window.location.href = 'login.html';
                 return;
             }
 
             try {
-                const user = JSON.parse(rawUser);
-                
-                // Display user's registered name
-                const displayName = user.fullname || user.username || 'Trader';
-                document.getElementById('welcomeUserName').innerText = displayName;
-                document.getElementById('headerUserGreeting').innerText = displayName;
+                const res = await fetch('/api/auth/me', {
+                    headers: { 'x-user-id': userId }
+                });
+                const data = await res.json();
 
-                // Load Balance & Data (Defaults if non-existent)
-                document.getElementById('accountBalance').innerText = Number(user.balanceUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
-                document.getElementById('totalProfit').innerText = Number(user.totalProfit || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
-                document.getElementById('totalBonus').innerText = Number(user.totalBonus || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
-                document.getElementById('totalReferralBonus').innerText = Number(user.totalReferralBonus || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
-                document.getElementById('totalInvestmentPlans').innerText = user.totalInvestmentPlans || 0;
-                document.getElementById('activeInvestmentPlans').innerText = user.activeInvestmentPlans || 0;
-                document.getElementById('totalDeposit').innerText = Number(user.totalDeposit || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
-                document.getElementById('totalWithdrawals').innerText = Number(user.totalWithdrawals || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
+                if (res.ok && data.user) {
+                    const u = data.user;
 
+                    // Update local cached user object
+                    localStorage.setItem('userId', u.id);
+
+                    // Formatter helper (keeps HTML styling $ sign intact)
+                    const fmt = num => Number(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                    // Set Greetings
+                    const displayName = u.fullname || u.username || 'Trader';
+                    if (document.getElementById('welcomeUserName')) document.getElementById('welcomeUserName').innerText = displayName;
+                    if (document.getElementById('headerUserGreeting')) document.getElementById('headerUserGreeting').innerText = displayName;
+
+                    // Map metrics directly to DOM matching dashboard.html IDs
+                    if (document.getElementById('accountBalance')) document.getElementById('accountBalance').innerText = fmt(u.balanceUSD);
+                    if (document.getElementById('totalProfit')) document.getElementById('totalProfit').innerText = fmt(u.totalProfit);
+                    if (document.getElementById('totalBonus')) document.getElementById('totalBonus').innerText = fmt(u.totalBonus);
+                    if (document.getElementById('totalReferralBonus')) document.getElementById('totalReferralBonus').innerText = fmt(u.totalReferralBonus);
+                    if (document.getElementById('totalInvestmentPlans')) document.getElementById('totalInvestmentPlans').innerText = u.totalInvestmentPlans || 0;
+                    if (document.getElementById('activeInvestmentPlans')) document.getElementById('activeInvestmentPlans').innerText = u.activeInvestmentPlans || 0;
+                    if (document.getElementById('totalDeposit')) document.getElementById('totalDeposit').innerText = fmt(u.totalDeposit);
+                    if (document.getElementById('totalWithdrawals')) document.getElementById('totalWithdrawals').innerText = fmt(u.totalWithdrawals);
+                } else {
+                    console.error('Session error:', data.error);
+                }
             } catch (err) {
-                console.error("Error parsing user data", err);
+                console.error('Failed to load dashboard data:', err);
             }
-            <script>
-    async function loadDashboardData() {
-        const userId = localStorage.getItem('userId') || sessionStorage.getItem('userId');
-        
-        if (!userId) {
-            window.location.href = 'login.html';
-            return;
         }
 
-        try {
-            const res = await fetch('/api/auth/me', {
-                headers: { 'x-user-id': userId }
-            });
-            const data = await res.json();
-
-            if (res.ok && data.user) {
-                const u = data.user;
-
-                // Format numbers to currency strings
-                const fmt = num => `$${Number(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-                // Map database values directly to HTML DOM elements
-                if (document.getElementById('userBalance')) document.getElementById('userBalance').innerText = fmt(u.balanceUSD);
-                if (document.getElementById('totalProfit')) document.getElementById('totalProfit').innerText = fmt(u.totalProfit);
-                if (document.getElementById('totalBonus')) document.getElementById('totalBonus').innerText = fmt(u.totalBonus);
-                if (document.getElementById('totalDeposit')) document.getElementById('totalDeposit').innerText = fmt(u.totalDeposit);
-                if (document.getElementById('totalWithdrawals')) document.getElementById('totalWithdrawals').innerText = fmt(u.totalWithdrawals);
-            }
-        } catch (err) {
-            console.error('Failed to update dashboard fields:', err);
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', loadDashboardData);
-</script>
-        });
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
     </script>
 </body>
 </html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Terminal | Teslavestexchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 950: '#030712', 900: '#0B192C', 800: '#1E3E62' },
+                        brand: { gold: '#FFD700', goldHover: '#E6C200', green: '#00E676' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glow-gold-text { text-shadow: 0 0 12px rgba(255, 215, 0, 0.7); }
+        .glow-card { box-shadow: 0 0 25px rgba(30, 62, 98, 0.3); }
+        .glow-gold-btn { box-shadow: 0 0 18px rgba(255, 215, 0, 0.3); }
+    </style>
+</head>
+<body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col justify-between font-mono text-xs relative">
+
+    <!-- Admin Password Gatekeeper Modal -->
+    <div id="authModal" class="fixed inset-0 bg-navy-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-navy-900 border border-navy-800 p-8 rounded-2xl max-w-md w-full space-y-6 glow-card text-center">
+            <div class="w-12 h-12 bg-red-500/10 text-red-500 rounded-xl flex items-center justify-center mx-auto text-xl font-bold border border-red-500/20">
+                🔒
+            </div>
+            <div>
+                <h2 class="text-xl font-black text-white uppercase tracking-wider">Restricted Access</h2>
+                <p class="text-slate-400 text-[11px] mt-1">Enter administrative key to unlock command terminal.</p>
+            </div>
+            <form onsubmit="handleAuth(event)" class="space-y-4">
+                <input type="password" id="adminPasskeyInput" required placeholder="Enter Admin Passkey..." 
+                    class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white text-center focus:outline-none focus:border-brand-gold text-sm tracking-widest">
+                <button type="submit" class="w-full py-3 bg-brand-gold hover:bg-brand-goldHover text-slate-950 font-black rounded-xl uppercase tracking-wider glow-gold-btn transition">
+                    Authenticate Terminal
+                </button>
+            </form>
+            <p id="authError" class="text-red-400 text-[11px] hidden"></p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="border-b border-navy-800 bg-navy-900/90 p-4 sticky top-0 z-40 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <a href="dashboard.html" class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center font-extrabold text-slate-950">T</div>
+            <span class="font-extrabold text-white text-base">TESLAVEST <span class="text-red-500">[ADMIN TERMINAL]</span></span>
+        </a>
+        <div class="flex items-center gap-3">
+            <button onclick="lockTerminal()" class="px-3 py-1.5 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10">🔒 Lock</button>
+            <a href="dashboard.html" class="px-3 py-1.5 rounded-xl border border-navy-800 text-slate-300 hover:text-brand-gold">← Dashboard</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-black text-brand-gold glow-gold-text uppercase">User Account Management</h1>
+                <p class="text-slate-400 text-[11px] mt-1">Directly modify user balance, profit, deposit, and withdrawal metrics.</p>
+            </div>
+            
+            <input type="text" id="searchInput" oninput="filterUsers()" placeholder="Search user by email or username..." 
+                class="w-full sm:w-72 bg-navy-900 border border-navy-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-brand-gold">
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-navy-900 border border-navy-800 rounded-2xl glow-card overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-navy-800 bg-navy-950/50 text-slate-400 uppercase text-[10px]">
+                            <th class="p-4">User Details</th>
+                            <th class="p-4">Balance ($)</th>
+                            <th class="p-4">Profit ($)</th>
+                            <th class="p-4">Bonus ($)</th>
+                            <th class="p-4">Deposit ($)</th>
+                            <th class="p-4">Withdrawal ($)</th>
+                            <th class="p-4 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody" class="divide-y divide-navy-800/50">
+                        <tr>
+                            <td colspan="7" class="p-6 text-center text-slate-500">Authenticate to load user database...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-navy-800 bg-navy-950 py-4 text-center text-slate-500">
+        © 2026 Teslavestexchange Engine. Admin Secured Portal.
+    </footer>
+
+    <script>
+        let allUsers = [];
+        let currentAdminKey = sessionStorage.getItem('teslavest_admin_key') || '';
+
+        function handleAuth(e) {
+            e.preventDefault();
+            const inputKey = document.getElementById('adminPasskeyInput').value;
+            currentAdminKey = inputKey;
+            sessionStorage.setItem('teslavest_admin_key', inputKey);
+            fetchUsers();
+        }
+
+        function lockTerminal() {
+            sessionStorage.removeItem('teslavest_admin_key');
+            currentAdminKey = '';
+            document.getElementById('authModal').classList.remove('hidden');
+            document.getElementById('userTableBody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">Terminal locked.</td></tr>`;
+        }
+
+        async function fetchUsers() {
+            const errorEl = document.getElementById('authError');
+            errorEl.classList.add('hidden');
+
+            try {
+                const res = await fetch('/api/admin/users', {
+                    headers: { 'x-admin-key': currentAdminKey }
+                });
+                const data = await res.json();
+
+                if (res.status === 401) {
+                    errorEl.innerText = 'Invalid Admin Passkey. Access Denied.';
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+
+                if (res.ok) {
+                    document.getElementById('authModal').classList.add('hidden');
+                    allUsers = data.users || [];
+                    renderUsers(allUsers);
+                } else {
+                    alert(data.error || 'Failed to fetch user list.');
+                }
+            } catch (err) {
+                alert('Server connectivity error.');
+            }
+        }
+
+        function renderUsers(users) {
+            const tbody = document.getElementById('userTableBody');
+            if (!users || users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">No registered users found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = users.map(u => `
+                <tr class="hover:bg-navy-800/30 transition">
+                    <td class="p-4">
+                        <div class="font-bold text-white">${u.fullname || u.username || 'Unnamed'}</div>
+                        <div class="text-[10px] text-slate-400">${u.email}</div>
+                    </td>
+                    <td class="p-4"><input type="number" step="0.01" id="bal-${u._id}" value="${u.balanceUSD || 0}" class="w-24 bg-navy-950 border border-navy-800 rounded px-2 py-1 text-brand-gold font-bold focus:outline-none"></td>
+                    <td class="p-4"><input type="number" step="0.01" id="prof-${u._id}" value="${u.totalProfit || 0}" class="w-24 bg-navy-950 border border-navy-800 rounded px-2 py-1 text-brand-green font-bold focus:outline-none"></td>
+                    <td class="p-4"><input type="number" step="0.01" id="bon-${u._id}" value="${u.totalBonus || 0}" class="w-24 bg-navy-950 border border-navy-800 rounded px-2 py-1 text-white font-bold focus:outline-none"></td>
+                    <td class="p-4"><input type="number" step="0.01" id="dep-${u._id}" value="${u.totalDeposit || 0}" class="w-24 bg-navy-950 border border-navy-800 rounded px-2 py-1 text-white font-bold focus:outline-none"></td>
+                    <td class="p-4"><input type="number" step="0.01" id="wd-${u._id}" value="${u.totalWithdrawals || 0}" class="w-24 bg-navy-950 border border-navy-800 rounded px-2 py-1 text-white font-bold focus:outline-none"></td>
+                    <td class="p-4 text-center">
+                        <button onclick="saveUser('${u._id}')" class="px-3 py-1.5 rounded-lg bg-brand-gold hover:bg-brand-goldHover text-slate-950 font-black transition glow-gold-btn">
+                            SAVE
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterUsers() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allUsers.filter(u => 
+                (u.email && u.email.toLowerCase().includes(query)) ||
+                (u.username && u.username.toLowerCase().includes(query)) ||
+                (u.fullname && u.fullname.toLowerCase().includes(query))
+            );
+            renderUsers(filtered);
+        }
+
+        async function saveUser(userId) {
+            const payload = {
+                userId,
+                balanceUSD: document.getElementById(`bal-${userId}`).value,
+                totalProfit: document.getElementById(`prof-${userId}`).value,
+                totalBonus: document.getElementById(`bon-${userId}`).value,
+                totalDeposit: document.getElementById(`dep-${userId}`).value,
+                totalWithdrawals: document.getElementById(`wd-${userId}`).value,
+            };
+
+            try {
+                const res = await fetch('/api/admin/users', {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-admin-key': currentAdminKey
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alert('User changes saved successfully!');
+                } else {
+                    alert(data.error || 'Failed to save changes.');
+                }
+            } catch (err) {
+                alert('Server error updating user.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (currentAdminKey) {
+                fetchUsers();
+            }
+        });
+    </script>
+</body>
+</html>

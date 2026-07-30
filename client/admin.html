@@ -127,7 +127,16 @@
                 const res = await fetch('/api/admin/users', {
                     headers: { 'x-admin-key': currentAdminKey }
                 });
-                const data = await res.json();
+
+                const contentType = res.headers.get("content-type");
+                let data;
+                if (contentType && contentType.includes("application/json")) {
+                    data = await res.json();
+                } else {
+                    const rawText = await res.text();
+                    alert(`Server Error (${res.status}): ${rawText.substring(0, 150)}`);
+                    return;
+                }
 
                 if (res.status === 401) {
                     errorEl.innerText = 'Invalid Admin Passkey. Access Denied.';
@@ -143,7 +152,8 @@
                     alert(data.error || 'Failed to fetch user list.');
                 }
             } catch (err) {
-                alert('Server connectivity error.');
+                console.error('Fetch error:', err);
+                alert(`Network / Connectivity Error: ${err.message}`);
             }
         }
 
@@ -184,46 +194,47 @@
             renderUsers(filtered);
         }
 
-       async function saveUser(userId) {
-    const payload = {
-        userId,
-        balanceUSD: document.getElementById(`bal-${userId}`).value,
-        totalProfit: document.getElementById(`prof-${userId}`).value,
-        totalBonus: document.getElementById(`bon-${userId}`).value,
-        totalDeposit: document.getElementById(`dep-${userId}`).value,
-        totalWithdrawals: document.getElementById(`wd-${userId}`).value,
-    };
+        async function saveUser(userId) {
+            const payload = {
+                userId,
+                balanceUSD: document.getElementById(`bal-${userId}`).value,
+                totalProfit: document.getElementById(`prof-${userId}`).value,
+                totalBonus: document.getElementById(`bon-${userId}`).value,
+                totalDeposit: document.getElementById(`dep-${userId}`).value,
+                totalWithdrawals: document.getElementById(`wd-${userId}`).value,
+            };
 
-    try {
-        const res = await fetch('/api/admin/users', {
-            method: 'PUT',
-            headers: { 
-                'Content-Type': 'application/json',
-                'x-admin-key': currentAdminKey
-            },
-            body: JSON.stringify(payload)
-        });
+            try {
+                const res = await fetch('/api/admin/users', {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-admin-key': currentAdminKey
+                    },
+                    body: JSON.stringify(payload)
+                });
 
-        const contentType = res.headers.get("content-type");
-        let data;
-        if (contentType && contentType.includes("application/json")) {
-            data = await res.json();
-        } else {
-            const rawText = await res.text();
-            alert(`Server Error (${res.status}): ${rawText.substring(0, 150)}`);
-            return;
+                const contentType = res.headers.get("content-type");
+                let data;
+                if (contentType && contentType.includes("application/json")) {
+                    data = await res.json();
+                } else {
+                    const rawText = await res.text();
+                    alert(`Server Error (${res.status}): ${rawText.substring(0, 150)}`);
+                    return;
+                }
+
+                if (res.ok) {
+                    alert('User changes saved successfully!');
+                    fetchUsers();
+                } else {
+                    alert(data.error || 'Failed to save changes.');
+                }
+            } catch (err) {
+                console.error('Save error:', err);
+                alert(`Network Error: ${err.message}`);
+            }
         }
-
-        if (res.ok) {
-            alert('User changes saved successfully!');
-            fetchUsers(); // Refresh data table
-        } else {
-            alert(data.error || 'Failed to save changes.');
-        }
-    } catch (err) {
-        console.error('Save error:', err);
-        alert(`Network Error: ${err.message}`);
-    }
 
         document.addEventListener('DOMContentLoaded', () => {
             if (currentAdminKey) {

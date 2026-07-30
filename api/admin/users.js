@@ -1,7 +1,4 @@
-// Step out of admin/ to api/utils/db
 const connectToDatabase = require('../utils/db');
-
-// Step out of admin/ and api/ to models/user
 const User = require('../../models/user');
 
 const ADMIN_PASSKEY = process.env.ADMIN_PASSKEY || 'Healing1'; 
@@ -10,7 +7,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   try {
-    // 1. Authenticate Admin Passkey from Request Headers
+    // 1. Authenticate Admin Passkey
     const authHeader = req.headers['x-admin-key'];
     if (!authHeader || authHeader !== ADMIN_PASSKEY) {
       return res.status(401).json({ error: 'Unauthorized: Invalid Admin Passkey.' });
@@ -26,32 +23,29 @@ module.exports = async function handler(req, res) {
 
     // 3. PUT: Update specific user fields manually
     if (req.method === 'PUT') {
-      const { userId, balanceUSD, totalProfit, totalBonus, totalReferralBonus, totalDeposit, totalWithdrawals } = req.body;
+      const { userId, balanceUSD, totalProfit, totalBonus, totalDeposit, totalWithdrawals } = req.body;
 
       if (!userId) {
         return res.status(400).json({ error: 'User ID is required.' });
       }
 
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        {
-          $set: {
-            balanceUSD: Number(balanceUSD) || 0,
-            totalProfit: Number(totalProfit) || 0,
-            totalBonus: Number(totalBonus) || 0,
-            totalReferralBonus: Number(totalReferralBonus) || 0,
-            totalDeposit: Number(totalDeposit) || 0,
-            totalWithdrawals: Number(totalWithdrawals) || 0,
-          }
-        },
-        { new: true }
-      ).select('-password');
-
-      if (!updatedUser) {
+      // Fetch user document
+      const user = await User.findById(userId);
+      if (!user) {
         return res.status(404).json({ error: 'User not found.' });
       }
 
-      return res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+      // Explicitly assign numbers to ensure pre-existing or missing fields get written
+      user.balanceUSD = isNaN(parseFloat(balanceUSD)) ? 0 : parseFloat(balanceUSD);
+      user.totalProfit = isNaN(parseFloat(totalProfit)) ? 0 : parseFloat(totalProfit);
+      user.totalBonus = isNaN(parseFloat(totalBonus)) ? 0 : parseFloat(totalBonus);
+      user.totalDeposit = isNaN(parseFloat(totalDeposit)) ? 0 : parseFloat(totalDeposit);
+      user.totalWithdrawals = isNaN(parseFloat(totalWithdrawals)) ? 0 : parseFloat(totalWithdrawals);
+
+      // Save the updated document back to MongoDB
+      await user.save();
+
+      return res.status(200).json({ message: 'User updated successfully', user });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });

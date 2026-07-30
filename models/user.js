@@ -12,3 +12,9 @@ const userSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.models.User || mongoose.model('User', userSchema);
+// Inside models/user.js schema definition:
+balanceUSD: { type: Number, default: 0 },
+totalProfit: { type: Number, default: 0 },
+totalBonus: { type: Number, default: 0 },
+totalDeposit: { type: Number, default: 0 },
+totalWithdrawals: { type: Number, default: 0 },

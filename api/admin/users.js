@@ -2,14 +2,17 @@ module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   try {
-    // 1. Safe module imports inside try block to catch path errors
+    // 1. Safely import modules supporting both ES Modules (export default) and CommonJS (module.exports)
     let connectToDatabase, User;
     try {
-      connectToDatabase = require('../utils/db');
-      User = require('../../models/user');
+      const dbModule = require('../utils/db');
+      connectToDatabase = dbModule.default || dbModule;
+
+      const userModule = require('../../models/user');
+      User = userModule.default || userModule;
     } catch (importErr) {
       console.error('Import Path Error:', importErr);
-      return res.status(500).json({ error: `Server configuration error: ${importErr.message}` });
+      return res.status(500).json({ error: `Server import error: ${importErr.message}` });
     }
 
     // 2. Authenticate Admin Passkey
@@ -20,6 +23,7 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ error: 'Unauthorized: Invalid Admin Passkey.' });
     }
 
+    // Connect to database
     await connectToDatabase();
 
     // 3. GET: List all users

@@ -131,6 +131,40 @@
         });
 
         updateWalletAddress();
+
+        let dynamicMethods = {};
+
+async function loadDepositOptions() {
+    try {
+        const res = await fetch('/api/payment-methods');
+        const data = await res.json();
+        
+        if (data.success && data.methods.length > 0) {
+            data.methods.forEach(m => {
+                dynamicMethods[m.code] = m;
+            });
+            
+            // Render default selected method (e.g. BTC)
+            selectPaymentMethod('btc');
+        }
+    } catch (err) {
+        console.error('Failed to load live deposit methods:', err);
+    }
+}
+
+function selectPaymentMethod(key) {
+    const method = dynamicMethods[key];
+    if (!method) return;
+
+    if (document.getElementById('selectedMethodTitle')) document.getElementById('selectedMethodTitle').innerText = method.name;
+    if (document.getElementById('selectedNetworkText')) document.getElementById('selectedNetworkText').innerText = method.network;
+    if (document.getElementById('walletAddressInput')) document.getElementById('walletAddressInput').value = method.address;
+    if (document.getElementById('qrCodeImg') && method.qrCodeUrl) {
+        document.getElementById('qrCodeImg').src = method.qrCodeUrl;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadDepositOptions);
     </script>
 </body>
 </html>

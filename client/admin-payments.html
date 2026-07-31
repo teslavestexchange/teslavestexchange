@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Manage Payment Methods</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 p-6 min-h-screen font-mono text-xs">
+    <div class="max-w-4xl mx-auto space-y-6">
+        
+        <div class="border-b border-slate-800 pb-4 flex justify-between items-center">
+            <h1 class="text-xl font-black text-amber-400">ADMIN: PAYMENT METHODS MANAGEMENT</h1>
+        </div>
+
+        <!-- Form Card -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+            <h2 class="text-sm font-bold text-white uppercase">Update or Add Payment Method</h2>
+            
+            <form id="paymentForm" onsubmit="handleSavePaymentMethod(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-400 mb-1">Select Asset Code</label>
+                        <select id="assetCode" onchange="loadFormDetails()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:outline-none">
+                            <option value="btc">Bitcoin (BTC)</option>
+                            <option value="eth">Ethereum (ETH)</option>
+                            <option value="usdt">Tether USD (USDT)</option>
+                            <option value="usdc">USD Coin (USDC)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Display Name</label>
+                        <input type="text" id="assetName" required placeholder="Bitcoin (BTC)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-400 mb-1">Network Note</label>
+                        <input type="text" id="assetNetwork" placeholder="ETH Network (ERC20)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">Wallet Address</label>
+                        <input type="text" id="assetAddress" required placeholder="0x1Ede..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- QR Code Upload / Preview -->
+                <div class="space-y-2">
+                    <label class="block text-slate-400">QR Code Image (Upload File)</label>
+                    <input type="file" id="qrFileInput" accept="image/*" onchange="convertImageToBase64()" class="block w-full text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-amber-400 file:text-slate-950 file:font-bold hover:file:bg-amber-500">
+                    <input type="hidden" id="qrCodeUrl">
+                </div>
+
+                <!-- Image Preview -->
+                <div id="previewContainer" class="hidden space-y-2">
+                    <span class="text-slate-400 block">QR Code Preview:</span>
+                    <img id="qrPreview" class="w-32 h-32 object-contain bg-white p-2 rounded-xl border border-slate-800">
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl bg-amber-400 text-slate-950 font-black uppercase hover:bg-amber-500 transition">
+                    Save / Update Deposit Method
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        let cachedMethods = {};
+
+        // Load existing configurations from DB
+        async function fetchMethods() {
+            try {
+                const res = await fetch('/api/payment-methods');
+                const data = await res.json();
+                if (data.success) {
+                    data.methods.forEach(m => {
+                        cachedMethods[m.code] = m;
+                    });
+                    loadFormDetails();
+                }
+            } catch (err) {
+                console.error("Failed to load methods:", err);
+            }
+        }
+
+        // Fill inputs when asset code changes
+        function loadFormDetails() {
+            const code = document.getElementById('assetCode').value;
+            const item = cachedMethods[code] || {};
+
+            document.getElementById('assetName').value = item.name || getPresetName(code);
+            document.getElementById('assetNetwork').value = item.network || '';
+            document.getElementById('assetAddress').value = item.address || '';
+            document.getElementById('qrCodeUrl').value = item.qrCodeUrl || '';
+
+            if (item.qrCodeUrl) {
+                document.getElementById('qrPreview').src = item.qrCodeUrl;
+                document.getElementById('previewContainer').classList.remove('hidden');
+            } else {
+                document.getElementById('previewContainer').classList.add('hidden');
+            }
+        }
+
+        function getPresetName(code) {
+            const names = { btc: 'Bitcoin (BTC)', eth: 'Ethereum (ETH)', usdt: 'Tether USD (USDT)', usdc: 'USD Coin (USDC)' };
+            return names[code] || code.toUpperCase();
+        }
+
+        // Convert uploaded file directly to Base64 image URL
+        function convertImageToBase64() {
+            const file = document.getElementById('qrFileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                document.getElementById('qrCodeUrl').value = reader.result;
+                document.getElementById('qrPreview').src = reader.result;
+                document.getElementById('previewContainer').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Save method via API
+        async function handleSavePaymentMethod(e) {
+            e.preventDefault();
+
+            const payload = {
+                code: document.getElementById('assetCode').value,
+                name: document.getElementById('assetName').value,
+                network: document.getElementById('assetNetwork').value,
+                address: document.getElementById('assetAddress').value,
+                qrCodeUrl: document.getElementById('qrCodeUrl').value
+            };
+
+            try {
+                const res = await fetch('/api/admin/payment-methods', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    alert('Payment method successfully updated!');
+                    fetchMethods();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to update.'));
+                }
+            } catch (err) {
+                console.error('Submit error:', err);
+                alert('Connection error.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchMethods);
+    </script>
+</body>
+</html>

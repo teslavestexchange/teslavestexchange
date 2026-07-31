@@ -44,15 +44,16 @@
             </div>
 
             <form id="depositForm" class="space-y-4">
-                <!-- Select Asset -->
+                <!-- Select Asset (Populated Dynamically) -->
                 <div class="space-y-1">
                     <label class="text-slate-300 uppercase font-bold">Select Payment Asset</label>
-                    <select id="asset" class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold" onchange="updateWalletAddress()">
-                        <option value="USDT_TRC20">USDT (TRC20)</option>
-                        <option value="BTC">Bitcoin (BTC)</option>
-                        <option value="ETH">Ethereum (ERC20)</option>
+                    <select id="assetSelect" onchange="onAssetChange(this.value)" class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold">
+                        <option value="">Loading live payment methods...</option>
                     </select>
                 </div>
+
+                <!-- Network Note Display -->
+                <p id="selectedNetworkText" class="text-[11px] text-brand-green font-semibold min-h-[16px]"></p>
 
                 <!-- Deposit Amount -->
                 <div class="space-y-1">
@@ -60,11 +61,19 @@
                     <input type="number" id="amount" min="10" required placeholder="e.g. 500" class="w-full bg-navy-950 border border-navy-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-gold">
                 </div>
 
+                <!-- QR Code Container -->
+                <div id="qrContainer" class="hidden flex flex-col items-center justify-center p-4 bg-navy-950 border border-navy-800 rounded-xl space-y-2">
+                    <span class="text-slate-400 text-[10px] uppercase font-bold">Scan QR Barcode</span>
+                    <div class="p-2 bg-white rounded-xl shadow-md">
+                        <img id="qrCodeImg" src="" alt="Wallet QR Code" class="w-40 h-40 object-contain">
+                    </div>
+                </div>
+
                 <!-- Wallet Address Card -->
                 <div class="bg-navy-950 border border-navy-800 p-4 rounded-xl space-y-2">
                     <span class="text-slate-400 text-[10px] uppercase font-bold">Deposit Address</span>
                     <div class="flex items-center justify-between gap-2">
-                        <input type="text" id="walletAddress" readonly value="T9x2y...USDT_TRC20_WALLET" class="bg-transparent text-brand-gold font-bold w-full focus:outline-none text-xs">
+                        <input type="text" id="walletAddressInput" readonly value="Loading..." class="bg-transparent text-brand-gold font-bold w-full focus:outline-none text-xs">
                         <button type="button" onclick="copyAddress()" class="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-brand-gold hover:text-slate-950 font-bold transition">Copy</button>
                     </div>
                 </div>
@@ -82,23 +91,77 @@
     </footer>
 
     <script>
-        const wallets = {
-            USDT_TRC20: "TX7N289aLm3pQ8R9vX21908KzA91238912",
-            BTC: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
-            ETH: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
-        };
+        let dynamicMethods = {};
 
-        function updateWalletAddress() {
-            const selected = document.getElementById('asset').value;
-            document.getElementById('walletAddress').value = wallets[selected] || wallets.USDT_TRC20;
+        // 1. Fetch active payment options saved by Admin from MongoDB
+        async function loadLiveDepositOptions() {
+            try {
+                const res = await fetch('/api/payment-methods');
+                const data = await res.json();
+
+                const selectElem = document.getElementById('assetSelect');
+                selectElem.innerHTML = '';
+
+                if (data.success && data.methods && data.methods.length > 0) {
+                    data.methods.forEach(m => {
+                        const codeKey = m.code.toLowerCase();
+                        dynamicMethods[codeKey] = m;
+
+                        // Add option to dropdown
+                        const opt = document.createElement('option');
+                        opt.value = codeKey;
+                        opt.textContent = m.name;
+                        selectElem.appendChild(opt);
+                    });
+
+                    // Auto select the first available method
+                    const firstCode = data.methods[0].code.toLowerCase();
+                    selectElem.value = firstCode;
+                    renderMethodDetails(firstCode);
+                } else {
+                    selectElem.innerHTML = '<option value="">No active payment options available</option>';
+                    document.getElementById('walletAddressInput').value = 'Contact support';
+                }
+            } catch (err) {
+                console.error('Failed to fetch live methods:', err);
+                document.getElementById('walletAddressInput').value = 'Error loading address';
+            }
         }
 
+        // 2. Render details when user changes dropdown selection
+        function onAssetChange(key) {
+            renderMethodDetails(key);
+        }
+
+        function renderMethodDetails(key) {
+            const method = dynamicMethods[key];
+            if (!method) return;
+
+            document.getElementById('walletAddressInput').value = method.address;
+            document.getElementById('selectedNetworkText').innerText = method.network ? `Network: ${method.network}` : '';
+
+            // Handle QR Barcode image display
+            const qrContainer = document.getElementById('qrContainer');
+            const qrImg = document.getElementById('qrCodeImg');
+
+            if (method.qrCodeUrl) {
+                qrImg.src = method.qrCodeUrl;
+                qrContainer.classList.remove('hidden');
+            } else {
+                qrContainer.classList.add('hidden');
+            }
+        }
+
+        // 3. One-click copy address
         function copyAddress() {
-            const addr = document.getElementById('walletAddress');
+            const addr = document.getElementById('walletAddressInput');
+            if (!addr.value || addr.value.includes('Loading')) return;
+
             navigator.clipboard.writeText(addr.value);
-            alert('Address copied to clipboard!');
+            alert('Deposit address copied to clipboard!');
         }
 
+        // 4. Handle Submit Deposit Notification
         document.getElementById('depositForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
@@ -106,14 +169,15 @@
             submitBtn.innerText = "PROCESSING...";
 
             const amount = document.getElementById('amount').value;
-            const asset = document.getElementById('asset').value;
+            const assetKey = document.getElementById('assetSelect').value;
+            const selectedAsset = dynamicMethods[assetKey] ? dynamicMethods[assetKey].name : assetKey;
             const user = JSON.parse(localStorage.getItem('teslavest_user') || '{}');
 
             try {
                 const res = await fetch('/api/transactions/deposit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: user.id, amount, asset })
+                    body: JSON.stringify({ userId: user.id, amount, asset: selectedAsset })
                 });
                 const data = await res.json();
                 if (res.ok) {
@@ -130,41 +194,8 @@
             }
         });
 
-        updateWalletAddress();
-
-        let dynamicMethods = {};
-
-async function loadDepositOptions() {
-    try {
-        const res = await fetch('/api/payment-methods');
-        const data = await res.json();
-        
-        if (data.success && data.methods.length > 0) {
-            data.methods.forEach(m => {
-                dynamicMethods[m.code] = m;
-            });
-            
-            // Render default selected method (e.g. BTC)
-            selectPaymentMethod('btc');
-        }
-    } catch (err) {
-        console.error('Failed to load live deposit methods:', err);
-    }
-}
-
-function selectPaymentMethod(key) {
-    const method = dynamicMethods[key];
-    if (!method) return;
-
-    if (document.getElementById('selectedMethodTitle')) document.getElementById('selectedMethodTitle').innerText = method.name;
-    if (document.getElementById('selectedNetworkText')) document.getElementById('selectedNetworkText').innerText = method.network;
-    if (document.getElementById('walletAddressInput')) document.getElementById('walletAddressInput').value = method.address;
-    if (document.getElementById('qrCodeImg') && method.qrCodeUrl) {
-        document.getElementById('qrCodeImg').src = method.qrCodeUrl;
-    }
-}
-
-document.addEventListener('DOMContentLoaded', loadDepositOptions);
+        // Initialize dynamic fetch on page load
+        document.addEventListener('DOMContentLoaded', loadLiveDepositOptions);
     </script>
 </body>
 </html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Live Support Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-mono text-xs h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900 p-4 flex justify-between items-center">
+        <h1 class="text-amber-400 font-black text-base uppercase">Admin Support Desk</h1>
+        <span id="connectionStatus" class="text-emerald-400 text-[11px]">● Live Sync Active</span>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="flex-grow flex overflow-hidden">
+        
+        <!-- Left: Ticket List -->
+        <div class="w-1/3 border-r border-slate-800 bg-slate-900/50 flex flex-col">
+            <div class="p-3 border-b border-slate-800 font-bold text-slate-400 uppercase">Active Tickets</div>
+            <div id="ticketList" class="flex-grow overflow-y-auto divide-y divide-slate-800/50">
+                <div class="p-4 text-slate-500">Loading tickets...</div>
+            </div>
+        </div>
+
+        <!-- Right: Active Chat -->
+        <div class="w-2/3 flex flex-col bg-slate-950">
+            <div id="activeTicketHeader" class="p-4 border-b border-slate-800 bg-slate-900/80 font-bold text-white flex justify-between">
+                <span>Select a ticket to begin chatting</span>
+            </div>
+
+            <div id="adminMessageArea" class="flex-grow p-4 overflow-y-auto space-y-3">
+                <div class="text-slate-600 text-center py-10">No ticket selected</div>
+            </div>
+
+            <!-- Admin Reply Box -->
+            <form id="adminReplyForm" onsubmit="sendAdminReply(event)" class="p-4 border-t border-slate-800 bg-slate-900 flex gap-3 hidden">
+                <input type="text" id="adminInputMsg" placeholder="Write reply to user..." required class="flex-grow bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-400">
+                <button type="submit" class="bg-amber-400 text-slate-950 font-black px-6 py-3 rounded-xl hover:bg-amber-500 uppercase">
+                    Send Reply
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentTicketId = null;
+
+        async function fetchTickets() {
+            try {
+                const res = await fetch('/api/admin/support');
+                const data = await res.json();
+
+                if (data.success) {
+                    const container = document.getElementById('ticketList');
+                    container.innerHTML = '';
+
+                    if (data.tickets.length === 0) {
+                        container.innerHTML = '<div class="p-4 text-slate-500">No active tickets found.</div>';
+                        return;
+                    }
+
+                    data.tickets.forEach(t => {
+                        const item = document.createElement('div');
+                        item.className = `p-4 cursor-pointer hover:bg-slate-800/80 transition ${currentTicketId === t.ticketId ? 'bg-slate-800 border-l-4 border-amber-400' : ''}`;
+                        item.onclick = () => selectTicket(t);
+                        item.innerHTML = `
+                            <div class="flex justify-between font-bold text-white">
+                                <span>${t.userName}</span>
+                                <span class="text-[10px] text-amber-400">${t.ticketId}</span>
+                            </div>
+                            <div class="text-[10px] text-slate-400 mt-1">${t.userEmail}</div>
+                        `;
+                        container.appendChild(item);
+                    });
+                }
+            } catch (err) {
+                console.error('Fetch tickets error:', err);
+            }
+        }
+
+        function selectTicket(ticket) {
+            currentTicketId = ticket.ticketId;
+            document.getElementById('activeTicketHeader').innerHTML = `
+                <div>Chatting with: <span class="text-amber-400">${ticket.userName}</span> (${ticket.userEmail})</div>
+                <span class="text-slate-400 text-xs">${ticket.ticketId}</span>
+            `;
+            document.getElementById('adminReplyForm').classList.remove('hidden');
+            fetchMessages();
+            fetchTickets();
+        }
+
+        async function fetchMessages() {
+            if (!currentTicketId) return;
+
+            try {
+                const res = await fetch(`/api/support?ticketId=${currentTicketId}`);
+                const data = await res.json();
+
+                if (data.success) {
+                    const area = document.getElementById('adminMessageArea');
+                    area.innerHTML = '';
+
+                    data.messages.forEach(m => {
+                        const isAdmin = m.sender === 'admin';
+                        const bubble = document.createElement('div');
+                        bubble.className = isAdmin 
+                            ? 'bg-amber-400 text-slate-950 font-semibold p-3 rounded-xl max-w-[80%] ml-auto text-right'
+                            : 'bg-slate-800 text-slate-100 p-3 rounded-xl max-w-[80%] border border-slate-700';
+                        bubble.innerHTML = `
+                            <div class="text-[9px] text-slate-400 uppercase font-black mb-1">${m.sender}</div>
+                            <div>${m.text}</div>
+                        `;
+                        area.appendChild(bubble);
+                    });
+
+                    area.scrollTop = area.scrollHeight;
+                }
+            } catch (err) {
+                console.error('Fetch messages error:', err);
+            }
+        }
+
+        async function sendAdminReply(e) {
+            e.preventDefault();
+            if (!currentTicketId) return;
+
+            const input = document.getElementById('adminInputMsg');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+
+            try {
+                await fetch('/api/support', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ticketId: currentTicketId,
+                        text,
+                        sender: 'admin'
+                    })
+                });
+                fetchMessages();
+            } catch (err) {
+                console.error('Reply failed:', err);
+            }
+        }
+
+        // Poll for updates every 4 seconds
+        setInterval(() => {
+            fetchTickets();
+            if (currentTicketId) fetchMessages();
+        }, 4000);
+
+        document.addEventListener('DOMContentLoaded', fetchTickets);
+    </script>
+</body>
+</html>

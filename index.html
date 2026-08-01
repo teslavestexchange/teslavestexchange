@@ -928,5 +928,134 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(triggerNextPopup, 7000);
 })();
 </script>
+<!-- FLOATING SUPPORT CHAT WIDGET (BOTTOM-LEFT) -->
+<div id="supportWidget" class="fixed bottom-5 left-5 z-50 font-mono text-xs">
+    
+    <!-- Floating Trigger Icon Button -->
+    <button onclick="toggleSupportChat()" class="bg-amber-400 hover:bg-amber-500 text-slate-950 p-3.5 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+    </button>
+
+    <!-- Chat Window Popup -->
+    <div id="chatBox" class="hidden absolute bottom-16 left-0 w-80 sm:w-96 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[420px]">
+        
+        <!-- Chat Header -->
+        <div class="bg-slate-950 border-b border-slate-800 p-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="font-bold text-white uppercase tracking-wider">Live Support Desk</span>
+            </div>
+            <button onclick="toggleSupportChat()" class="text-slate-400 hover:text-white font-black text-sm">✕</button>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="chatMessages" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-950/50">
+            <div class="bg-slate-800 text-slate-300 p-3 rounded-xl max-w-[85%] self-start border border-slate-700">
+                Hello! How can we assist with your deposit or account today?
+            </div>
+        </div>
+
+        <!-- Chat Input Form -->
+        <form onsubmit="sendUserMessage(event)" class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2">
+            <input type="text" id="userInputMsg" placeholder="Type a message..." required class="flex-grow bg-slate-900 border border-slate-800 text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400">
+            <button type="submit" class="bg-amber-400 text-slate-950 px-4 py-2 rounded-xl font-extrabold hover:bg-amber-500 transition">
+                Send
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let activeTicketId = localStorage.getItem('teslavest_ticket_id');
+
+    // Create unique Ticket ID if not stored
+    if (!activeTicketId) {
+        activeTicketId = 'TICKET-' + Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('teslavest_ticket_id', activeTicketId);
+    }
+
+    function toggleSupportChat() {
+        const box = document.getElementById('chatBox');
+        box.classList.toggle('hidden');
+        if (!box.classList.contains('hidden')) {
+            fetchChatHistory();
+        }
+    }
+
+    async function fetchChatHistory() {
+        try {
+            const res = await fetch(`/api/support?ticketId=${activeTicketId}`);
+            const data = await res.json();
+
+            if (data.success) {
+                const msgBox = document.getElementById('chatMessages');
+                msgBox.innerHTML = `
+                    <div class="bg-slate-800 text-slate-300 p-3 rounded-xl max-w-[85%] border border-slate-700">
+                        Hello! How can we assist with your deposit or account today?
+                    </div>
+                `;
+
+                data.messages.forEach(m => {
+                    const isUser = m.sender === 'user';
+                    const bubble = document.createElement('div');
+                    bubble.className = isUser 
+                        ? 'bg-amber-400 text-slate-950 font-semibold p-3 rounded-xl max-w-[85%] ml-auto text-right'
+                        : 'bg-slate-800 text-slate-200 p-3 rounded-xl max-w-[85%] border border-slate-700';
+                    bubble.innerText = m.text;
+                    msgBox.appendChild(bubble);
+                });
+
+                msgBox.scrollTop = msgBox.scrollHeight;
+            }
+        } catch (err) {
+            console.error('Error fetching chat history:', err);
+        }
+    }
+
+    async function sendUserMessage(e) {
+        e.preventDefault();
+        const input = document.getElementById('userInputMsg');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const userObj = JSON.parse(localStorage.getItem('teslavest_user') || '{}');
+
+        // Optimistic UI Render
+        const msgBox = document.getElementById('chatMessages');
+        const userBubble = document.createElement('div');
+        userBubble.className = 'bg-amber-400 text-slate-950 font-semibold p-3 rounded-xl max-w-[85%] ml-auto text-right';
+        userBubble.innerText = text;
+        msgBox.appendChild(userBubble);
+        msgBox.scrollTop = msgBox.scrollHeight;
+
+        input.value = '';
+
+        try {
+            await fetch('/api/support', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ticketId: activeTicketId,
+                    text,
+                    sender: 'user',
+                    userName: userObj.name || 'Guest User',
+                    userEmail: userObj.email || 'guest@teslavest.com'
+                })
+            });
+        } catch (err) {
+            console.error('Send message failed:', err);
+        }
+    }
+
+    // Auto-poll for new admin replies every 5 seconds when open
+    setInterval(() => {
+        const box = document.getElementById('chatBox');
+        if (box && !box.classList.contains('hidden')) {
+            fetchChatHistory();
+        }
+    }, 5000);
+</script>
 </body>
 </html>
